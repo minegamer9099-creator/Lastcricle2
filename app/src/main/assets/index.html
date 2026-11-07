@@ -428,6 +428,14 @@ body.mobile-game .game-screen .reload-action { display: none; }
   .profile-footer .locker-open { height: 30px; }
 }
 
+/* =====================  ARSENAL UI  ===================== */
+.hud-weapon-icon { display: block; width: 68px; height: 23px; filter: drop-shadow(0 1px 3px rgba(0,0,0,.8)); }
+.pickup-gun { display: block; width: 70px; height: 26px; filter: drop-shadow(0 1px 3px rgba(0,0,0,.8)); }
+.pickup-gun[hidden] { display: none; }
+.game-screen .ammo-row { align-items: center; }
+.game-screen .pickup-prompt { min-width: 0; gap: 10px; }
+.pickup-prompt b, .pickup-prompt small { text-align: left; white-space: nowrap; }
+
 </style>
   
 </head>
@@ -511,14 +519,14 @@ body.mobile-game .game-screen .reload-action { display: none; }
       </div>
       <div class="match-notice" id="match-message" role="status" aria-live="polite"></div>
       <div class="minimap-wrap" data-layout-id="minimap" aria-label="Tactical map"><div class="minimap-grid"><canvas id="mini-map-canvas" width="144" height="144" aria-label="Map showing the safe zone and operators"></canvas><span class="map-north">N</span></div><span class="map-caption">SECTOR 04</span><button type="button" class="map-expand" data-action="map" aria-label="Expand map">+</button></div>
-      <div class="pickup-prompt" id="pickup-prompt" role="status" hidden><span class="pickup-key">E</span><span><b>FIELD ITEM</b><small>Tap to collect</small></span><span class="pickup-arrow">↗</span></div>
+      <div class="pickup-prompt" id="pickup-prompt" role="status" hidden><span class="pickup-key">E</span><canvas class="pickup-gun" width="140" height="52" hidden></canvas><span><b>FIELD ITEM</b><small>Tap to collect</small></span><span class="pickup-arrow">↗</span></div>
 
       <div class="hud-bottom">
         <div class="vitals">
           <div class="vital-line"><span class="vital-icon health-icon" aria-hidden="true">+</span><div class="vital-track"><span id="hud-health" style="width:100%"></span></div><b id="hud-hp-num">100</b></div>
           <div class="vital-line"><span class="vital-icon armor-icon" aria-hidden="true">◇</span><div class="vital-track"><span id="hud-armor" style="width:65%"></span></div><b id="hud-armor-num">65</b></div>
         </div>
-        <div class="weapon-panel"><div class="weapon-name"><span id="hud-weapon">M4 CARBINE</span><span class="weapon-tag">AR / 01</span></div><div class="ammo-row"><strong id="hud-ammo">30<span> / 120</span></strong><button type="button" class="hud-action reload-action" data-action="reload">RELOAD <kbd>R</kbd></button></div></div>
+        <div class="weapon-panel"><div class="weapon-name"><span id="hud-weapon">M4 CARBINE</span><span class="weapon-tag">AR / 01</span></div><div class="ammo-row"><canvas id="hud-weapon-icon" class="hud-weapon-icon" width="136" height="46" aria-hidden="true"></canvas><strong id="hud-ammo">30<span> / 120</span></strong><button type="button" class="hud-action reload-action" data-action="reload">RELOAD <kbd>R</kbd></button></div></div>
         <div class="kill-counter"><span class="crosshair-small" aria-hidden="true">⌖</span><span><b id="hud-kills">0</b><small>ELIMS</small></span></div>
       </div>
       <div class="mobile-controls" aria-label="Touch controls">
@@ -779,7 +787,39 @@ body.mobile-game .game-screen .reload-action { display: none; }
       return tracer.rainbow ? `hsl(${(now * 0.35 + x * 0.4) % 360}, 100%, 65%)` : tracer.color;
     }
 
+    static drawRocket(ctx, b) {
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.rotate(b.angle);
+      const flame = 10 + Math.random() * 8;
+      const g = ctx.createLinearGradient(-8, 0, -16 - flame, 0);
+      g.addColorStop(0, "rgba(255,200,90,.95)");
+      g.addColorStop(1, "rgba(255,90,30,0)");
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.moveTo(-8, -3);
+      ctx.lineTo(-16 - flame, 0);
+      ctx.lineTo(-8, 3);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "#b9c0b0";
+      ctx.beginPath();
+      roundedRect(ctx, -8, -3, 14, 6, 2);
+      ctx.fill();
+      ctx.fillStyle = "#e85d3a";
+      ctx.beginPath();
+      ctx.moveTo(6, -3.4);
+      ctx.lineTo(13, 0);
+      ctx.lineTo(6, 3.4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "#6b7068";
+      ctx.fillRect(-8, -5, 3, 10);
+      ctx.restore();
+    }
+
     static drawBullet(ctx, b, quality, now) {
+      if (b.blast) { this.drawRocket(ctx, b); return; }
       const tr = b.tracer;
       const color = tr ? this.tracerColor(tr, now, b.x) : b.color;
       const len = tr ? tr.trail : 0.022;
@@ -1087,6 +1127,103 @@ body.mobile-game .game-screen .reload-action { display: none; }
     }
   }
 
+  /* ---------------- ARSENAL: new weapons + weapon art ---------------- */
+  Object.assign(WEAPONS, {
+    "AK-47": { damage: 24, fireRate: 0.125, magazine: 30, reload: 2.0, range: 800, spread: 0.085, speed: 1000, pellets: 1, recoil: 0.045 },
+    UZI: { damage: 9, fireRate: 0.068, magazine: 25, reload: 1.3, range: 380, spread: 0.15, speed: 820, pellets: 1, recoil: 0.02 },
+    RPK: { damage: 20, fireRate: 0.105, magazine: 45, reload: 3.0, range: 780, spread: 0.08, speed: 990, pellets: 1, recoil: 0.032 },
+    M249: { damage: 16, fireRate: 0.07, magazine: 100, reload: 4.4, range: 720, spread: 0.115, speed: 960, pellets: 1, recoil: 0.02, ammoMul: 2 },
+    AWM: { damage: 112, fireRate: 1.7, magazine: 5, reload: 2.9, range: 1500, spread: 0.008, speed: 1750, pellets: 1, recoil: 0.17, ammoMul: 0.3 },
+    RPG: { damage: 140, fireRate: 2.1, magazine: 1, reload: 3.4, range: 780, spread: 0.012, speed: 560, pellets: 1, recoil: 0.2, blast: 96, ammoMul: 0.1 },
+  });
+  WEAPON_NAMES.length = 0;
+  WEAPON_NAMES.push(...Object.keys(WEAPONS));
+
+  // parts: [color, x, y, w, h, radius] - gun points along +x, actor centre is (0,0)
+  const WEAPON_ART = {
+    Pistol: { label: "PISTOL", rarity: "common", weight: 0, len: 27, parts: [
+      ["#2b3030", 8, -3, 17, 6, 2], ["#1b1f1f", 10, -1, 9, 2, 1], ["#9aa08f", 23, -1.6, 4, 3.2, 1]] },
+    SMG: { label: "SMG", rarity: "common", weight: 12, len: 36, parts: [
+      ["#262b28", 6, -3.4, 26, 6.8, 2.5], ["#14181a", 15, -4.8, 4, 9.6, 1], ["#969b88", 31, -1.8, 5, 3.6, 1]] },
+    UZI: { label: "UZI", rarity: "common", weight: 12, len: 31, parts: [
+      ["#9aa08f", -1, -1, 8, 2, 1], ["#262b28", 6, -3.6, 18, 7.2, 2], ["#14181a", 11, -4.6, 5, 9.2, 1], ["#9aa08f", 23, -1.6, 7, 3.2, 1]] },
+    "Assault Rifle": { label: "M4A1", rarity: "common", weight: 12, len: 42, parts: [
+      ["#33403a", 0, -2.6, 10, 5.2, 2], ["#262b28", 8, -3.4, 24, 6.8, 2], ["#303633", 26, -3, 11, 6, 2],
+      ["#14181a", 18, -4.6, 5, 9.2, 1], ["#9aa08f", 36, -1.4, 6, 2.8, 1]] },
+    "AK-47": { label: "AK-47", rarity: "rare", weight: 10, len: 45, parts: [
+      ["#8a5a34", -2, -3, 12, 6, 2], ["#2a2e2c", 9, -3.2, 18, 6.4, 2], ["#9a6a3c", 25, -3.4, 12, 6.8, 2],
+      ["#6b7068", 27, -5.4, 11, 1.4, 0.7], ["#3a2c20", 17, -4.4, 6, 8.8, 2], ["#9aa08f", 36, -1.3, 9, 2.6, 1]] },
+    RPK: { label: "RPK", rarity: "rare", weight: 8, len: 52, parts: [
+      ["#8a5a34", -2, -3, 12, 6, 2], ["#2a2e2c", 9, -3.2, 18, 6.4, 2], ["#9a6a3c", 25, -3.4, 14, 6.8, 2],
+      ["#3a2c20", 17, -4.8, 7, 9.6, 2], ["#9aa08f", 38, -1.3, 14, 2.6, 1], ["#6b7068", 44, -5.6, 1.8, 11.2, 0.9]] },
+    M249: { label: "M249", rarity: "epic", weight: 4, len: 54, parts: [
+      ["#2c312d", -2, -3, 12, 6, 2], ["#2d3331", 8, -4, 30, 8, 2], ["#4a5240", 14, 3.4, 13, 7, 2],
+      ["#3a403c", 35, -3.2, 10, 6.4, 2], ["#9aa08f", 44, -1.8, 10, 3.6, 1], ["#6b7068", 40, -6, 1.8, 12, 0.9]] },
+    Shotgun: { label: "SHOTGUN", rarity: "common", weight: 11, len: 48, parts: [
+      ["#8a5a34", -2, -3, 10, 6, 2], ["#262b28", 8, -3.2, 14, 6.4, 2], ["#3b413d", 20, -2.6, 26, 5.2, 1.6],
+      ["#6e4a2c", 28, -3.8, 10, 7.6, 2], ["#9aa08f", 45, -2, 3, 4, 1]] },
+    "Sniper Rifle": { label: "SNIPER", rarity: "rare", weight: 7, len: 56, parts: [
+      ["#33403a", -2, -3, 14, 6, 2], ["#262b28", 11, -2.8, 22, 5.6, 2], ["#3b413d", 32, -1.5, 22, 3, 1],
+      ["#14181a", 16, -6.2, 14, 3.4, 1.4], ["#6fe0ff", 29.5, -6, 1.6, 3, 0.5], ["#9aa08f", 53, -2.2, 3, 4.4, 1]] },
+    AWM: { label: "AWM", rarity: "legendary", weight: 3, len: 62, parts: [
+      ["#2f4a3a", -3, -3.6, 16, 7.2, 2], ["#2a3a30", 11, -3, 22, 6, 2], ["#2b2f2c", 33, -1.8, 26, 3.6, 1],
+      ["#14181a", 15, -6.6, 18, 4, 1.6], ["#6fe0ff", 32.5, -6.4, 1.8, 3.4, 0.5], ["#9aa08f", 58, -2.8, 5, 5.6, 1],
+      ["#6b7068", 40, -6, 1.8, 12, 0.9]] },
+    RPG: { label: "RPG-7", rarity: "epic", weight: 3, len: 56, parts: [
+      ["#2c3128", -4, -5.6, 8, 11.2, 2], ["#4b5a3a", 4, -4.2, 40, 8.4, 3], ["#14181a", 17, -7, 4, 3.4, 1],
+      ["#3a4530", 28, -4.8, 6, 9.6, 2], ["#c85a3a", 44, -3.6, 12, 7.2, 3.2], ["#e8e0c8", 52, -1.6, 3, 3.2, 1]] },
+  };
+  const LOOT_WEAPONS = Object.keys(WEAPON_ART).filter((name) => WEAPON_ART[name].weight > 0);
+  function pickLootWeapon() {
+    const total = LOOT_WEAPONS.reduce((sum, name) => sum + WEAPON_ART[name].weight, 0);
+    let roll = Math.random() * total;
+    for (const name of LOOT_WEAPONS) { roll -= WEAPON_ART[name].weight; if (roll <= 0) return name; }
+    return "SMG";
+  }
+  function pickBotWeapon() {
+    const table = [["SMG", 22], ["Assault Rifle", 26], ["AK-47", 18], ["UZI", 14], ["Shotgun", 12], ["RPK", 5], ["Sniper Rifle", 3]];
+    let roll = Math.random() * table.reduce((sum, row) => sum + row[1], 0);
+    for (const [name, weight] of table) { roll -= weight; if (roll <= 0) return name; }
+    return "Assault Rifle";
+  }
+
+  class WeaponArt {
+    static meta(name) { return WEAPON_ART[name] || WEAPON_ART.Pistol; }
+    static label(name) { return this.meta(name).label; }
+    static muzzle(name, r) { return Math.min(this.meta(name).len - 3, r + 24); }
+    static draw(ctx, name, flash = false) {
+      const art = this.meta(name);
+      for (const [color, x, y, w, h, radius] of art.parts) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        roundedRect(ctx, x, y, w, h, radius);
+        ctx.fill();
+      }
+      if (flash) {
+        ctx.fillStyle = "rgba(255,202,104,.88)";
+        ctx.beginPath();
+        ctx.moveTo(art.len - 2, 0);
+        ctx.lineTo(art.len + 11, -5.5);
+        ctx.lineTo(art.len + 7, 0);
+        ctx.lineTo(art.len + 11, 5.5);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+    static paintCanvas(canvas, name) {
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const art = this.meta(name);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const k = Math.min(canvas.width * 0.92 / (art.len + 2), canvas.height * 0.86 / 22);
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.scale(k, k);
+      ctx.translate(-art.len / 2 + 1, 0);
+      this.draw(ctx, name, false);
+    }
+  }
+
   class SaveSystem {
     constructor() {
       this.key = "last-circle-save-v1";
@@ -1220,11 +1357,15 @@ body.mobile-game .game-screen .reload-action { display: none; }
     }
 
     play(kind, weapon = "Assault Rifle") {
-      const pitch = ({ Pistol: 1.16, SMG: 1.4, "Assault Rifle": 1, Shotgun: 0.64, "Sniper Rifle": 0.42 })[weapon] || 1;
+      const pitch = ({ Pistol: 1.16, SMG: 1.4, "Assault Rifle": 1, Shotgun: 0.64, "Sniper Rifle": 0.42, "AK-47": 0.9, RPK: 0.86, M249: 0.78, UZI: 1.5, AWM: 0.34, RPG: 0.5 })[weapon] || 1;
       if (kind === "shot") this.tone(142 * pitch, 0.075, "sawtooth", 0.035, 46);
       if (kind === "reload") {
         this.tone(480, 0.07, "square", 0.025, 360);
         setTimeout(() => this.tone(350, 0.08, "square", 0.018, 280), 95);
+      }
+      if (kind === "explosion") {
+        this.tone(70, 0.5, "sawtooth", 0.09, 24);
+        setTimeout(() => this.tone(120, 0.35, "square", 0.05, 40), 40);
       }
       if (kind === "hit") this.tone(640, 0.075, "triangle", 0.028, 320);
       if (kind === "damage") this.tone(110, 0.18, "sawtooth", 0.045, 60);
@@ -1285,6 +1426,10 @@ body.mobile-game .game-screen .reload-action { display: none; }
       this.reserve = reserve == null ? this.spec.magazine * 3 : reserve;
       this.cooldown = 0;
       this.reloading = 0;
+    }
+
+    static ammoFor(weapon, amount) {
+      return Math.max(1, Math.round(amount * (weapon.spec.ammoMul ?? 1)));
     }
 
     clone() {
@@ -1689,9 +1834,62 @@ body.mobile-game .game-screen .reload-action { display: none; }
       this.phase = random(0, TAU);
     }
 
+    drawWeapon(ctx, time, bob) {
+      const meta = WeaponArt.meta(this.weapon);
+      const rc = RARITY[meta.rarity].color;
+      const pulse = 0.5 + 0.5 * Math.sin(time * 0.004 + this.phase);
+      ctx.save();
+      ctx.translate(this.x, this.y + bob);
+      if (meta.rarity === "epic" || meta.rarity === "legendary") {
+        const beam = ctx.createLinearGradient(0, -78, 0, 0);
+        beam.addColorStop(0, rc + "00");
+        beam.addColorStop(1, rc + (pulse > 0.5 ? "66" : "44"));
+        ctx.fillStyle = beam;
+        ctx.fillRect(-6, -78, 12, 78);
+      }
+      const glow = ctx.createRadialGradient(0, 2, 4, 0, 2, 36);
+      glow.addColorStop(0, rc + "55");
+      glow.addColorStop(1, rc + "00");
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(0, 2, 36, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = "rgba(17,25,20,.32)";
+      ctx.beginPath();
+      ctx.ellipse(2, 15, 25, 6, 0, 0, TAU);
+      ctx.fill();
+      const w = 58, h = 28;
+      ctx.fillStyle = "rgba(12,18,16,.88)";
+      ctx.beginPath();
+      roundedRect(ctx, -w / 2, -h / 2, w, h, 8);
+      ctx.fill();
+      ctx.strokeStyle = rc;
+      ctx.lineWidth = meta.rarity === "common" ? 1.4 : 2;
+      ctx.globalAlpha = meta.rarity === "common" ? 0.7 : 0.6 + 0.4 * pulse;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+      ctx.save();
+      const k = Math.min(44 / meta.len, 1.1);
+      ctx.rotate(-0.12);
+      ctx.scale(k, k);
+      ctx.translate(-meta.len / 2 + 1, 0);
+      WeaponArt.draw(ctx, this.weapon);
+      ctx.restore();
+      ctx.font = "800 8.5px system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.lineJoin = "round";
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = "rgba(8,12,10,.9)";
+      ctx.strokeText(meta.label, 0, h / 2 + 10);
+      ctx.fillStyle = rc;
+      ctx.fillText(meta.label, 0, h / 2 + 10);
+      ctx.restore();
+    }
+
     draw(ctx, time) {
       if (!this.alive) return;
       const bob = Math.sin(time * 0.0028 + this.phase) * 3;
+      if (this.kind === "weapon") { this.drawWeapon(ctx, time, bob); return; }
       const palette = { weapon: "#edbc63", ammo: "#9cbb69", health: "#e56f68", armor: "#71b7c4" };
       const color = palette[this.kind] || "#edbc63";
       ctx.save();
@@ -1747,8 +1945,14 @@ body.mobile-game .game-screen .reload-action { display: none; }
       this.owner = owner;
       this.tracer = playerShot ? Cosmetics.equipped("tracer") : null;
       this.color = playerShot ? this.tracer.color : "#ff8e60";
-      this.radius = weapon.name === "Sniper Rifle" ? 3 : 2.3;
+      this.blast = weapon.spec.blast || 0;
+      this.radius = this.blast ? 4.5 : weapon.name === "AWM" ? 3.4 : weapon.name === "Sniper Rifle" ? 3 : 2.3;
       this.alive = true;
+    }
+
+    detonate(game, x, y) {
+      this.alive = false;
+      game.explode(x, y, this.blast, this.damage, this.owner);
     }
 
     update(dt, game) {
@@ -1762,21 +1966,25 @@ body.mobile-game .game-screen .reload-action { display: none; }
       this.range -= travel;
       if (this.range <= 0 || nextX < 0 || nextY < 0 || nextX > game.map.size || nextY > game.map.size) {
         this.alive = false;
+        if (this.blast) this.detonate(game, previousX, previousY);
         return;
       }
       if (Collision.blockedSegment(previousX, previousY, nextX, nextY, game.map)) {
         this.alive = false;
         game.particles.emit(previousX + stepX * 0.4, previousY + stepY * 0.4, "wall", 3);
+        if (this.blast) this.detonate(game, previousX, previousY);
         return;
       }
       this.x = nextX;
       this.y = nextY;
+      if (this.blast && Math.random() < 0.9) game.particles.emitColor(this.x - Math.cos(this.angle) * 10, this.y - Math.sin(this.angle) * 10, ["#d8d8d0", "#9aa097", "#ffb15e"], 1, 14, 0.55, 3.4);
       for (const target of game.actors) {
         if (!target.alive || target === this.owner || target === this.owner.target && this.owner.isDead) continue;
         const radius = target.r + this.radius;
         if (distanceToSegmentSquared(target.x, target.y, previousX, previousY, nextX, nextY) <= radius ** 2) {
-          game.damage(target, this.damage, this.owner);
           this.alive = false;
+          if (this.blast) this.detonate(game, this.x, this.y);
+          else game.damage(target, this.damage, this.owner);
           break;
         }
       }
@@ -1902,7 +2110,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       this.weaponIndex = (this.weaponIndex + direction + this.inventory.length) % this.inventory.length;
       this.weapon = this.inventory[this.weaponIndex];
       this.weapon.reloading = 0;
-      if (this.isPlayer) UI.toast(this.weapon.name.toUpperCase(), 1.2, "weapon");
+      if (this.isPlayer) UI.toast(WeaponArt.label(this.weapon.name), 1.2, "weapon");
     }
   }
 
@@ -1992,7 +2200,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       this.weapon.cooldown = this.weapon.spec.fireRate;
       this.recoil = Math.min(0.26, this.recoil + this.weapon.spec.recoil);
       this.muzzle = 0.08;
-      const offset = this.r + 9;
+      const offset = WeaponArt.muzzle(this.weapon.name, this.r);
       for (let i = 0; i < this.weapon.spec.pellets; i++) {
         game.bullets.push(new Bullet(
           this.x + Math.cos(shotAngle) * offset,
@@ -2003,10 +2211,10 @@ body.mobile-game .game-screen .reload-action { display: none; }
           playerShot,
         ));
       }
-      game.particles.emit(this.x + Math.cos(shotAngle) * offset, this.y + Math.sin(shotAngle) * offset, "muzzle", this.weapon.name === "Shotgun" ? 9 : 5);
+      game.particles.emit(this.x + Math.cos(shotAngle) * offset, this.y + Math.sin(shotAngle) * offset, "muzzle", this.weapon.spec.blast ? 16 : this.weapon.name === "Shotgun" ? 9 : 5);
       if (playerShot) {
         audioSystem?.play("shot", this.weapon.name);
-        game.addShake(this.weapon.name === "Shotgun" ? 3.6 : this.weapon.name === "Sniper Rifle" ? 4.2 : 1.1);
+        game.addShake(Math.min(5, 0.6 + this.weapon.spec.recoil * 28));
       }
     }
   }
@@ -2020,7 +2228,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       this.hp = random(74, 100);
       this.maxHp = 100;
       this.armor = random(0, 44);
-      this.inventory = [new Weapon(Math.random() < 0.32 ? "SMG" : "Assault Rifle"), new Weapon("Pistol")];
+      this.inventory = [new Weapon(pickBotWeapon()), new Weapon("Pistol")];
       this.weaponIndex = 0;
       this.weapon = this.inventory[0];
       this.state = "PATROL";
@@ -2205,7 +2413,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       weapon.cooldown = weapon.spec.fireRate * random(1.02, 1.28);
       this.recoil = Math.min(0.28, this.recoil + weapon.spec.recoil * 0.7);
       this.muzzle = 0.075;
-      const offset = this.r + 8;
+      const offset = WeaponArt.muzzle(weapon.name, this.r);
       for (let i = 0; i < weapon.spec.pellets; i++) {
         game.bullets.push(new Bullet(
           this.x + Math.cos(aim) * offset,
@@ -2609,9 +2817,26 @@ body.mobile-game .game-screen .reload-action { display: none; }
       if (!prompt) return;
       prompt.hidden = !loot;
       prompt.classList.toggle("is-visible", Boolean(loot));
-      if (loot) {
-        const label = prompt.querySelector("[data-pickup-label]");
-        if (label) label.textContent = loot.kind === "weapon" ? loot.weapon.toUpperCase() : loot.kind.toUpperCase();
+      if (!loot) { this.promptKey = null; return; }
+      const key = loot.kind + (loot.weapon || "");
+      if (key === this.promptKey) return;
+      this.promptKey = key;
+      const title = prompt.querySelector("b");
+      const sub = prompt.querySelector("small");
+      const canvas = prompt.querySelector(".pickup-gun");
+      if (loot.kind === "weapon") {
+        const meta = WeaponArt.meta(loot.weapon);
+        const spec = WEAPONS[loot.weapon];
+        title.textContent = meta.label;
+        title.style.color = RARITY[meta.rarity].color;
+        sub.textContent = `${RARITY[meta.rarity].name} · ${spec.blast ? "EXPLOSIVE" : `${spec.damage * spec.pellets} DMG`} · ${spec.magazine} RND`;
+        canvas.hidden = false;
+        WeaponArt.paintCanvas(canvas, loot.weapon);
+      } else {
+        title.style.color = "";
+        title.textContent = { ammo: "AMMO PACK", health: "MEDKIT", armor: "ARMOR PLATE" }[loot.kind] || "FIELD ITEM";
+        sub.textContent = "Tap to collect";
+        canvas.hidden = true;
       }
     }
 
@@ -2639,7 +2864,13 @@ body.mobile-game .game-screen .reload-action { display: none; }
         armor.setAttribute("aria-label", `${Math.ceil(Math.max(0, player.armor))} armor`);
         const arNum = $("#hud-armor-num"); if (arNum) arNum.textContent = String(Math.ceil(Math.max(0, player.armor)));
       }
-      if (weapon) weapon.textContent = player.weapon.name.toUpperCase();
+      if (weapon) {
+        weapon.textContent = WeaponArt.label(player.weapon.name);
+        if (this.iconWeapon !== player.weapon.name) {
+          this.iconWeapon = player.weapon.name;
+          WeaponArt.paintCanvas($("#hud-weapon-icon"), player.weapon.name);
+        }
+      }
       if (ammo) {
         if (ammo.firstChild) ammo.firstChild.textContent = String(player.weapon.magazine);
         const reserve = ammo.querySelector("span");
@@ -2868,6 +3099,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
 
     start(mode = "battle") {
       this.floaters = [];
+      this.blasts = [];
       this.shake = 0;
       this.streak = { count: 0, last: 0 };
       this.runBonus = 0;
@@ -2956,11 +3188,13 @@ body.mobile-game .game-screen .reload-action { display: none; }
           y = random(60, this.map.size - 60);
         }
         const kind = choose(kinds);
-        this.loot.push(new Loot(x, y, kind, kind === "ammo" ? 24 : kind === "health" ? 1 : 1, kind === "weapon" ? choose(WEAPON_NAMES.slice(1)) : null));
+        this.loot.push(new Loot(x, y, kind, kind === "ammo" ? 24 : kind === "health" ? 1 : 1, kind === "weapon" ? pickLootWeapon() : null));
       }
     }
 
     addDeathLoot(actor) {
+      const gun = actor.inventory && actor.inventory.find((w) => w.name !== "Pistol" && w.magazine + w.reserve > 0);
+      if (gun) this.loot.push(new Loot(actor.x + random(-14, 14), actor.y + random(-14, 14), "weapon", 1, gun.name));
       for (let i = 0; i < 2; i++) {
         const kind = i === 0 ? "ammo" : Math.random() < 0.5 ? "health" : "armor";
         this.loot.push(new Loot(actor.x + random(-20, 20), actor.y + random(-20, 20), kind, kind === "ammo" ? 18 : 1));
@@ -3035,22 +3269,8 @@ body.mobile-game .game-screen .reload-action { display: none; }
 
         if (player) CosmeticFX.drawAura(ctx, Cosmetics.equipped("aura"), actor.r, now, skin);
         ctx.rotate(actor.angle);
-        ctx.fillStyle = "#262b28";
-        ctx.beginPath();
-        roundedRect(ctx, -2, -4, actor.r + 20, 8, 3);
-        ctx.fill();
-        ctx.fillStyle = actor.muzzle > 0 ? "#ffce73" : "#969b88";
-        ctx.fillRect(actor.r + 13, -2.2, 5, 4.4);
-        if (actor.muzzle > 0) {
-          ctx.fillStyle = "rgba(255,202,104,.85)";
-          ctx.beginPath();
-          ctx.moveTo(actor.r + 18, 0);
-          ctx.lineTo(actor.r + 29, -5);
-          ctx.lineTo(actor.r + 26, 0);
-          ctx.lineTo(actor.r + 29, 5);
-          ctx.closePath();
-          ctx.fill();
-        }
+        if (actor.muzzle > 0) ctx.translate(-2.2, 0);
+        WeaponArt.draw(ctx, actor.weapon.name, actor.muzzle > 0);
         ctx.rotate(-actor.angle);
 
         ctx.fillStyle = skin ? skin.body : actor.color;
@@ -3094,6 +3314,44 @@ body.mobile-game .game-screen .reload-action { display: none; }
       }
     }
 
+    explode(x, y, radius, damage, owner) {
+      (this.blasts ||= []).push({ x, y, r: radius, life: 0.5, max: 0.5 });
+      this.particles.emitColor(x, y, ["#fff2bd", "#ffcf75", "#fa8f48", "#e85d3a"], 26, 260, 0.7, 6);
+      this.particles.emitColor(x, y, ["#5b5f58", "#7a7f76", "#3f4340"], 14, 90, 1.0, 8);
+      this.audio.play("explosion");
+      for (const actor of this.actors.slice()) {
+        if (!actor.alive) continue;
+        const d = Math.hypot(actor.x - x, actor.y - y);
+        if (d > radius + actor.r) continue;
+        const falloff = 1 - clamp((d - actor.r) / radius, 0, 1) * 0.65;
+        this.damage(actor, damage * falloff * (actor === owner ? 0.45 : 1), owner);
+      }
+      const p = this.player;
+      if (p) this.addShake(clamp(11 - Math.hypot(p.x - x, p.y - y) / 45, 0, 11));
+    }
+
+    drawBlasts(ctx) {
+      if (!this.blasts || !this.blasts.length) return;
+      for (const b of this.blasts) {
+        const p = 1 - b.life / b.max;
+        const rad = b.r * (0.25 + 0.75 * p);
+        const g = ctx.createRadialGradient(b.x, b.y, rad * 0.1, b.x, b.y, rad);
+        g.addColorStop(0, `rgba(255,214,120,${0.75 * (1 - p)})`);
+        g.addColorStop(1, "rgba(255,110,40,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, rad, 0, TAU);
+        ctx.fill();
+        ctx.globalAlpha = (1 - p) * 0.9;
+        ctx.strokeStyle = "#ffb15e";
+        ctx.lineWidth = 1 + 6 * (1 - p);
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, rad, 0, TAU);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+    }
+
     addFloater(x, y, text, color = "#fff", size = 13) {
       (this.floaters ||= []).push({ x: x + random(-6, 6), y, text: String(text), color, size, life: 0.9, max: 0.9 });
       if (this.floaters.length > 40) this.floaters.shift();
@@ -3109,9 +3367,11 @@ body.mobile-game .game-screen .reload-action { display: none; }
         }
       }
       this.shake = Math.max(0, (this.shake || 0) - dt * 26);
+      if (this.blasts) for (let i = this.blasts.length - 1; i >= 0; i--) { this.blasts[i].life -= dt; if (this.blasts[i].life <= 0) this.blasts.splice(i, 1); }
     }
 
     drawFloaters(ctx) {
+      this.drawBlasts(ctx);
       if (!this.floaters || !this.floaters.length) return;
       ctx.textAlign = "center";
       ctx.lineJoin = "round";
@@ -3251,9 +3511,9 @@ body.mobile-game .game-screen .reload-action { display: none; }
       loot.alive = false;
       if (loot.kind === "weapon") {
         this.player.addWeapon(loot.weapon);
-        UI.toast(`${loot.weapon.toUpperCase()} ACQUIRED`, 1.8, "weapon");
+        UI.toast(`${WeaponArt.label(loot.weapon)} ACQUIRED`, 1.8, "weapon");
       } else if (loot.kind === "ammo") {
-        this.player.inventory.forEach((weapon) => { weapon.reserve += loot.amount; });
+        this.player.inventory.forEach((weapon) => { weapon.reserve += Weapon.ammoFor(weapon, loot.amount); });
         UI.toast(`+${loot.amount} AMMO`, 1.5, "weapon");
       } else if (loot.kind === "health") {
         const healed = Math.min(45, this.player.maxHp - this.player.hp);
@@ -3273,7 +3533,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       if (!loot.alive) return;
       loot.alive = false;
       if (loot.kind === "weapon") bot.addWeapon(loot.weapon);
-      if (loot.kind === "ammo") bot.inventory.forEach((weapon) => { weapon.reserve += loot.amount; });
+      if (loot.kind === "ammo") bot.inventory.forEach((weapon) => { weapon.reserve += Weapon.ammoFor(weapon, loot.amount); });
       if (loot.kind === "health") bot.hp = Math.min(bot.maxHp, bot.hp + 42);
       if (loot.kind === "armor") bot.armor = Math.min(bot.maxArmor, bot.armor + 40);
       bot.lootTarget = null;
