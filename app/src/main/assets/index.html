@@ -463,6 +463,62 @@ body.mobile-game .game-screen .reload-action { display: none; }
 @keyframes regen-glow { from { filter: brightness(1); } to { filter: brightness(1.55) saturate(1.25); } }
 .operator-card.has-banner .operator-info * { color: #fff; opacity: 1; }
 
+/* =====================  TOUCH LAYOUT EDITOR v2  ===================== */
+.layout-editor-screen { --fire: clamp(70px, 26vh, 96px); --btn: clamp(42px, 14vh, 54px); --stick: clamp(112px, 39vh, 152px); --map: clamp(92px, 31vh, 126px); }
+.layout-preview-item { opacity: var(--preview-opacity, 1); }
+.layout-preview-stick { width: var(--stick); height: var(--stick); border: 2px solid rgba(255,255,255,.32); background: radial-gradient(circle, rgba(255,255,255,.08) 0 38%, rgba(8,12,10,.45) 39% 100%); }
+.layout-stick-knob { width: 42%; height: 42%; border: 2px solid rgba(255,255,255,.75); background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.6), rgba(130,170,100,.6)); }
+.layout-preview-button { width: var(--btn); height: var(--btn); padding: 0; border: 2px solid rgba(255,255,255,.4); background: radial-gradient(circle at 50% 30%, rgba(255,255,255,.18), rgba(8,12,10,.7) 72%); color: #f2f5ee; }
+.layout-preview-button svg { width: 46%; height: 46%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+.layout-preview-button small { margin-top: 0; font: 700 5.5px var(--font-ui); letter-spacing: .08em; color: #c9d3c3; pointer-events: none; }
+.layout-preview-fire { width: var(--fire); height: var(--fire); border: 3px solid rgba(255,200,130,.92); background: radial-gradient(circle at 50% 35%, rgba(255,170,90,.6), rgba(150,48,22,.7) 72%); color: #fff1e0; }
+.layout-preview-fire svg { width: 44%; height: 44%; }
+.layout-preview-map { width: var(--map); height: var(--map); border-radius: 14px; border: 2px solid rgba(255,255,255,.42); }
+.layout-map-ring { left: 50%; top: 50%; width: 62%; height: 62%; transform: translate(-50%, -50%); }
+.layout-map-dot { left: 50%; top: 50%; transform: translate(-50%, -50%); }
+
+.layout-editor-screen .layout-toolbar { top: max(8px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); width: 236px; padding: 0; border-radius: 12px; background: rgba(13,20,16,.88); box-shadow: 0 8px 24px rgba(0,0,0,.45); transition: opacity .15s; }
+.layout-editor-screen .layout-toolbar.is-dragging { opacity: .75; }
+.layout-editor-screen .layout-toolbar-header { padding: 6px 8px; gap: 7px; justify-content: flex-start; border-bottom: 1px solid rgba(255,255,255,.1); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
+.layout-editor-screen .layout-toolbar.is-dragging .layout-toolbar-header { cursor: grabbing; }
+.layout-grip { color: #8fa18f; font-size: 15px; line-height: 1; }
+.layout-title-wrap { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.layout-editor-screen .layout-toolbar-header h2 { margin: 0; font: 800 10px var(--font-ui); letter-spacing: .12em; color: #e1e8da; white-space: nowrap; }
+.layout-editor-screen .layout-selected-name { max-width: 96px; padding: 3px 6px; border-radius: 6px; font: 800 7px var(--font-ui); letter-spacing: .06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.layout-collapse { flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.06); color: #dfe6da; font: 800 14px/1 var(--font-ui); cursor: pointer; }
+.layout-toolbar-body { padding: 8px 10px 9px; display: grid; gap: 7px; }
+.layout-editor-screen .layout-toolbar.is-collapsed { width: auto; max-width: 190px; }
+.layout-editor-screen .layout-toolbar.is-collapsed .layout-toolbar-body { display: none; }
+.layout-editor-screen .layout-toolbar.is-collapsed .layout-toolbar-header { border-bottom: 0; }
+.layout-editor-screen .layout-size-control { display: grid; grid-template-columns: 42px 1fr 32px; align-items: center; gap: 6px; font: 800 7px var(--font-ui); letter-spacing: .1em; color: #b9c4b6; }
+.layout-editor-screen .layout-size-control output { text-align: right; font-size: 9px; }
+.layout-editor-screen .layout-size-control input { grid-column: auto; width: 100%; min-width: 0; height: 22px; }
+.layout-editor-screen .layout-opacity-control { grid-template-columns: 42px 1fr 32px auto; }
+.layout-all-btn { min-height: 22px; padding: 0 7px; border-radius: 6px; font: 800 7px var(--font-ui); letter-spacing: .08em; }
+.layout-editor-screen .layout-toolbar-actions { margin-top: 2px; gap: 5px; grid-template-columns: 1fr 1fr 1.3fr; }
+.layout-editor-screen .layout-toolbar-actions button { min-height: 28px; padding: 0 4px; border-radius: 8px; font: 800 7px var(--font-ui); }
+.layout-editor-screen .layout-stage-caption { font-size: 6.5px; }
+.game-screen [data-layout-id].has-custom-layout { opacity: var(--layout-opacity, 1); }
+.layout-editor-screen .layout-toolbar { left: calc(50% - 118px); }
+.layout-editor-screen .layout-toolbar.is-collapsed .layout-selected-name { display: none; }
+.layout-editor-screen .layout-toolbar.is-collapsed { left: calc(50% - 80px); }
+
+/* =====================  MAP SELECT  ===================== */
+.map-chip { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 10px; border-radius: 999px; border: 1px solid rgba(198,219,120,.55); background: rgba(198,219,120,.09); color: #c6db78; cursor: pointer; font-family: inherit; }
+.map-chip b { color: #fff; font-weight: 800; letter-spacing: .12em; }
+.map-chip-go { color: #ffd166; }
+.map-chip.has-new::after { content: "NEW"; position: absolute; top: -8px; right: -4px; padding: 1px 6px; border-radius: 99px; background: #ff4d4d; color: #fff; font: 800 8px var(--font-ui); letter-spacing: .06em; }
+.map-card .map-thumb { width: 78px; height: 78px; border-radius: 10px; border: 1.5px solid rgba(255,255,255,.28); }
+.map-card.is-locked .map-thumb { filter: grayscale(.9) brightness(.55); }
+#maps-canvas { height: clamp(90px, 30vh, 150px); width: auto; aspect-ratio: 1; border-radius: 14px; border: 2px solid rgba(255,255,255,.3); }
+.maps-screen .locker-preview { gap: 5px; }
+.map-req { display: grid; gap: 5px; width: 100%; }
+.map-req-row { display: grid; grid-template-columns: 1fr 54px 12px; align-items: center; gap: 6px; font: 700 7.5px var(--font-ui); letter-spacing: .08em; color: #b9c4b6; }
+.map-req-row i { height: 5px; border-radius: 3px; background: rgba(255,255,255,.12); overflow: hidden; }
+.map-req-row u { display: block; height: 100%; background: #c6db78; }
+.map-req-row.is-ok b { color: #7fd6a6; }
+.maps-screen .locker-wallet .locker-coins b { font-size: 12px; }
+
 </style>
   
 </head>
@@ -484,7 +540,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
 
       <div class="menu-layout">
         <section class="hero-copy">
-          <div class="eyebrow"><span class="eyebrow-line"></span> OPERATION: LAST LIGHT <span class="eyebrow-index">01 — 04</span></div>
+          <button id="btn-map" class="eyebrow map-chip" type="button"><span class="eyebrow-line"></span> MAP · <b id="map-chip-name">LAST LIGHT</b> <span class="eyebrow-index" id="map-chip-count">1 / 12</span><span class="map-chip-go" aria-hidden="true">▸</span></button>
           <h1>ONLY ONE<br><em>WALKS OUT.</em></h1>
           <p class="hero-description">The perimeter is closing. Scavenge fast, keep moving, and make every round count.</p>
           <div class="deploy-block">
@@ -568,6 +624,24 @@ body.mobile-game .game-screen .reload-action { display: none; }
       </div>
     </section>
 
+    <section id="screen-maps" class="screen locker-screen maps-screen" aria-label="Select map" hidden>
+      <header class="locker-top">
+        <button id="maps-back" class="locker-back" type="button">‹ BACK</button>
+        <div class="locker-title"><b>SELECT MAP</b><small>UNLOCK WITH LEVEL + PLAY TIME</small></div>
+        <div class="locker-wallet"><span class="locker-lv">LV <b id="maps-level">1</b></span><span class="locker-coins">⏱ <b id="maps-time">0m</b></span></div>
+      </header>
+      <div class="locker-body">
+        <aside class="locker-preview">
+          <canvas id="maps-canvas" width="360" height="360" aria-label="Map preview"></canvas>
+          <div class="locker-preview-name"><b id="maps-name">LAST LIGHT</b><small id="maps-sub" style="color:#a9b8a6;letter-spacing:.06em"></small></div>
+          <div id="maps-req" class="map-req"></div>
+          <button id="maps-action" class="button button-primary locker-action" type="button">SELECT MAP</button>
+        </aside>
+        <section class="locker-shop"><div id="maps-grid" class="locker-grid"></div></section>
+      </div>
+      <div id="maps-toast" class="locker-toast" role="status"></div>
+    </section>
+
     <section id="screen-locker" class="screen locker-screen" aria-label="Locker" hidden>
       <header class="locker-top">
         <button id="locker-back" class="locker-back" type="button">‹ BACK</button>
@@ -605,7 +679,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
             <label class="setting-row range-row" for="setting-sensitivity"><span><b>Look sensitivity</b><small>Camera movement speed</small></span><input id="setting-sensitivity" type="range" min="1" max="10" value="5"><output>5</output></label>
             <label class="setting-row range-row" for="setting-aim-sensitivity"><span><b>Aim sensitivity</b><small>Precision while aiming</small></span><input id="setting-aim-sensitivity" type="range" min="1" max="10" value="4"><output>4</output></label>
           </fieldset>
-          <button id="btn-edit-layout" class="control-layout-launch" type="button"><span><b>EDIT TOUCH LAYOUT</b><small>MOVE OR RESIZE BUTTONS AND MAP</small></span><span aria-hidden="true">↗</span></button>
+          <button id="btn-edit-layout" class="control-layout-launch" type="button"><span><b>EDIT TOUCH LAYOUT</b><small>MOVE, RESIZE OR FADE BUTTONS AND MAP</small></span><span aria-hidden="true">↗</span></button>
           <div class="settings-footer"><button id="setting-reset" type="button" class="button-reset">RESET PROGRESS</button><button id="btn-back" type="button" class="button button-primary compact-button"><span><strong>APPLY & RETURN</strong></span><span class="button-arrow">→</span></button></div>
           <div class="reset-confirm" role="group" aria-label="Confirm reset" hidden><p>Erase all operator progress on this device?</p><button type="button" class="confirm-reset">CONFIRM ERASE</button><button type="button" class="cancel-reset">CANCEL</button></div>
         </form>
@@ -615,20 +689,26 @@ body.mobile-game .game-screen .reload-action { display: none; }
     <section id="screen-layout" class="screen layout-editor-screen" aria-labelledby="layout-title" hidden>
       <div id="layout-stage" class="layout-stage" aria-label="Touch control layout preview">
         <div class="layout-preview-item layout-preview-stick" data-layout-id="joystick" data-layout-name="MOVE JOYSTICK" role="button" tabindex="0" aria-pressed="false" aria-label="Move joystick preview; drag to reposition"><span class="layout-stick-ring"></span><span class="layout-stick-knob"></span><small>MOVE</small></div>
-        <button class="layout-preview-item layout-preview-button layout-preview-aim" data-layout-id="aim" data-layout-name="AIM" type="button" aria-pressed="false" aria-label="Aim preview; drag to reposition">⌖<small>AIM</small></button>
-        <button class="layout-preview-item layout-preview-button layout-preview-fire" data-layout-id="fire" data-layout-name="FIRE" type="button" aria-pressed="false" aria-label="Fire preview; drag to reposition">◆<small>FIRE</small></button>
-        <button class="layout-preview-item layout-preview-button" data-layout-id="reload" data-layout-name="RELOAD" type="button" aria-pressed="false" aria-label="Reload preview; drag to reposition">↻<small>RELOAD</small></button>
-        <button class="layout-preview-item layout-preview-button" data-layout-id="switch" data-layout-name="WEAPON SWITCH" type="button" aria-pressed="false" aria-label="Weapon switch preview; drag to reposition">⇄<small>SWAP</small></button>
-        <button class="layout-preview-item layout-preview-button" data-layout-id="pickup" data-layout-name="PICK UP" type="button" aria-pressed="false" aria-label="Pickup preview; drag to reposition">＋<small>LOOT</small></button>
-        <button class="layout-preview-item layout-preview-button" data-layout-id="crouch" data-layout-name="CROUCH" type="button" aria-pressed="false" aria-label="Crouch preview; drag to reposition">⌄<small>CROUCH</small></button>
-        <button class="layout-preview-item layout-preview-button" data-layout-id="sprint" data-layout-name="SPRINT" type="button" aria-pressed="false" aria-label="Sprint preview; drag to reposition">»<small>SPRINT</small></button>
+        <button class="layout-preview-item layout-preview-button layout-preview-aim" data-layout-id="aim" data-layout-name="AIM" type="button" aria-pressed="false" aria-label="Aim preview; drag to reposition"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4"/></svg><small>AIM</small></button>
+        <button class="layout-preview-item layout-preview-button layout-preview-fire" data-layout-id="fire" data-layout-name="FIRE" type="button" aria-pressed="false" aria-label="Fire preview; drag to reposition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8c2.3 1.9 3.4 4.3 3.4 7.2v8.2H8.6V10c0-2.9 1.1-5.3 3.4-7.2z" fill="currentColor"/><path d="M7.5 21.2h9"/></svg><small>FIRE</small></button>
+        <button class="layout-preview-item layout-preview-button" data-layout-id="reload" data-layout-name="RELOAD" type="button" aria-pressed="false" aria-label="Reload preview; drag to reposition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.3-5.4"/><path d="M19.8 4.2v4.6h-4.6"/></svg><small>RELOAD</small></button>
+        <button class="layout-preview-item layout-preview-button" data-layout-id="switch" data-layout-name="WEAPON SWITCH" type="button" aria-pressed="false" aria-label="Weapon switch preview; drag to reposition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h14.5M15.2 4.8 18.5 8l-3.3 3.2"/><path d="M20 16H5.5M8.8 12.8 5.5 16l3.3 3.2"/></svg><small>SWAP</small></button>
+        <button class="layout-preview-item layout-preview-button" data-layout-id="pickup" data-layout-name="PICK UP" type="button" aria-pressed="false" aria-label="Pickup preview; drag to reposition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.2 8.5h11.6l1.1 11.7H5.1z"/><path d="M9 8.5V7a3 3 0 0 1 6 0v1.5"/></svg><small>LOOT</small></button>
+        <button class="layout-preview-item layout-preview-button" data-layout-id="crouch" data-layout-name="CROUCH" type="button" aria-pressed="false" aria-label="Crouch preview; drag to reposition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/><path d="M6 4.5h12"/></svg><small>CROUCH</small></button>
+        <button class="layout-preview-item layout-preview-button" data-layout-id="sprint" data-layout-name="SPRINT" type="button" aria-pressed="false" aria-label="Sprint preview; drag to reposition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 6l6 6-6 6M12.5 6l6 6-6 6"/></svg><small>SPRINT</small></button>
         <div class="layout-preview-item layout-preview-map" data-layout-id="minimap" data-layout-name="MINI-MAP" role="button" tabindex="0" aria-pressed="false" aria-label="Mini-map preview; drag to reposition"><span class="layout-map-ring"></span><span class="layout-map-dot"></span><small>TACTICAL MAP</small></div>
       </div>
-      <aside class="layout-toolbar" aria-label="Control layout editor">
-        <header class="layout-toolbar-header"><div><span class="eyebrow">FIELD CONFIGURATION / 03</span><h2 id="layout-title">CONTROL LAYOUT</h2></div><span id="layout-selected-name" class="layout-selected-name">FIRE</span></header>
-        <p class="layout-instructions">Tap a control, drag to move it, and use the size slider. The mini-map can move too.</p>
-        <label class="layout-size-control" for="layout-size"><span>SELECTED CONTROL SIZE</span><output id="layout-size-output">100%</output><input id="layout-size" type="range" min="70" max="150" step="5" value="100"></label>
-        <div class="layout-toolbar-actions"><button id="layout-reset" class="layout-secondary-button" type="button">RESET DEFAULTS</button><button id="layout-cancel" class="layout-secondary-button" type="button">CANCEL</button><button id="layout-apply" class="layout-apply-button" type="button">SAVE LAYOUT</button></div>
+      <aside id="layout-toolbar" class="layout-toolbar" aria-label="Control layout editor">
+        <header id="layout-toolbar-handle" class="layout-toolbar-header" title="Drag to move this panel">
+          <span class="layout-grip" aria-hidden="true">⠿</span>
+          <div class="layout-title-wrap"><h2 id="layout-title">CONTROL LAYOUT</h2><span id="layout-selected-name" class="layout-selected-name">FIRE</span></div>
+          <button id="layout-collapse" class="layout-collapse" type="button" aria-label="Minimize panel">–</button>
+        </header>
+        <div class="layout-toolbar-body">
+          <label class="layout-size-control" for="layout-size"><span>SIZE</span><input id="layout-size" type="range" min="70" max="150" step="5" value="100"><output id="layout-size-output">100%</output></label>
+          <label class="layout-size-control layout-opacity-control" for="layout-opacity"><span>OPACITY</span><input id="layout-opacity" type="range" min="20" max="100" step="5" value="100"><output id="layout-opacity-output">100%</output><button id="layout-opacity-all" class="layout-secondary-button layout-all-btn" type="button">ALL</button></label>
+          <div class="layout-toolbar-actions"><button id="layout-reset" class="layout-secondary-button" type="button">RESET</button><button id="layout-cancel" class="layout-secondary-button" type="button">CANCEL</button><button id="layout-apply" class="layout-apply-button" type="button">SAVE</button></div>
+        </div>
       </aside>
       <div class="layout-stage-caption" aria-hidden="true"><span>DRAG TO REPOSITION</span><span>LOCAL LAYOUT / SAVED ON THIS DEVICE</span></div>
     </section>
@@ -711,15 +791,15 @@ body.mobile-game .game-screen .reload-action { display: none; }
   const WEAPON_NAMES = Object.keys(WEAPONS);
   const BOT_STATES = ["IDLE", "PATROL", "SEARCH", "CHASE", "ATTACK", "RETREAT", "LOOT", "SAFE_ZONE", "DEAD"];
   const DEFAULT_CONTROL_LAYOUT = Object.freeze({
-    joystick: { x: 0.12, y: 0.75, size: 1 },
-    aim: { x: 0.80, y: 0.81, size: 1 },
-    fire: { x: 0.91, y: 0.81, size: 1 },
-    reload: { x: 0.835, y: 0.65, size: 1 },
-    switch: { x: 0.84, y: 0.44, size: 1 },
-    pickup: { x: 0.91, y: 0.58, size: 1 },
-    crouch: { x: 0.74, y: 0.675, size: 1 },
-    sprint: { x: 0.12, y: 0.46, size: 1 },
-    minimap: { x: 0.09, y: 0.18, size: 1 },
+    joystick: { x: 0.12, y: 0.75, size: 1, opacity: 1 },
+    aim: { x: 0.80, y: 0.81, size: 1, opacity: 1 },
+    fire: { x: 0.91, y: 0.81, size: 1, opacity: 1 },
+    reload: { x: 0.835, y: 0.65, size: 1, opacity: 1 },
+    switch: { x: 0.84, y: 0.44, size: 1, opacity: 1 },
+    pickup: { x: 0.91, y: 0.58, size: 1, opacity: 1 },
+    crouch: { x: 0.74, y: 0.675, size: 1, opacity: 1 },
+    sprint: { x: 0.12, y: 0.46, size: 1, opacity: 1 },
+    minimap: { x: 0.09, y: 0.18, size: 1, opacity: 1 },
   });
 
   const $$ = (selector) => Array.from(document.querySelectorAll(selector));
@@ -815,6 +895,19 @@ body.mobile-game .game-screen .reload-action { display: none; }
   ];
   for (const type of Object.keys(COSMETICS)) for (const item of COSMETICS[type]) item.type = type;
   const CARD_TABS = ["avatar", "banner"];
+  COSMETICS.killfx.push(
+    { id: "kf_pixel", name: "Pixel Burst", rarity: "common", level: 5, cost: 300, color: "#4cc9f0" },
+    { id: "kf_shockwave", name: "Shockwave", rarity: "common", level: 6, cost: 350, color: "#ffffff" },
+    { id: "kf_slash", name: "Katana Slash", rarity: "rare", level: 7, cost: 700, color: "#ff5a5a" },
+    { id: "kf_heart", name: "Love Burst", rarity: "rare", level: 9, cost: 900, color: "#ff7ab8" },
+    { id: "kf_toxic", name: "Toxic Cloud", rarity: "rare", level: 12, cost: 1100, color: "#9dff4d" },
+    { id: "kf_flame", name: "Fire Burst", rarity: "rare", level: 13, cost: 1300, color: "#ff8a3a" },
+    { id: "kf_skull", name: "Death Mark", rarity: "epic", level: 17, cost: 2200, color: "#ff4d4d" },
+    { id: "kf_meteor", name: "Meteor Strike", rarity: "epic", level: 22, cost: 3800, color: "#ff9a4a" },
+    { id: "kf_nova", name: "Supernova", rarity: "legendary", level: 29, cost: 7500, color: "#fff6a8" },
+    { id: "kf_angel", name: "Angel Wings", rarity: "legendary", level: 27, cost: 7000, color: "#fff3b0" },
+  );
+  for (const item of COSMETICS.killfx) item.type = "killfx";
 
   const AVATAR_SHAPES = {
     default: (fg) => `<text x="24" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="900" font-size="19" fill="${fg}">LC</text>`,
@@ -881,6 +974,19 @@ body.mobile-game .game-screen .reload-action { display: none; }
       this.save.save();
       return true;
     }
+    static randomLoadout() {
+      const d = this.save && this.save.data;
+      const level = d ? d.level : 1;
+      const mine = d && d.equipped ? d.equipped : {};
+      const pick = (type) => {
+        let pool = COSMETICS[type].filter((item) => item.level <= level && !item.wins);
+        if (type === "skin") { const others = pool.filter((item) => item.id !== mine.skin); if (others.length) pool = others; }
+        const fancy = pool.filter((item) => item.cost > 0);
+        return choose(fancy.length && Math.random() < 0.8 ? fancy : pool);
+      };
+      return { skin: pick("skin"), tracer: pick("tracer"), aura: pick("aura"), killfx: pick("killfx") };
+    }
+
     static newCount() {
       let count = 0;
       for (const type of Object.keys(COSMETICS)) for (const item of COSMETICS[type]) if (this.state(item) === "buyable") count++;
@@ -1108,6 +1214,280 @@ body.mobile-game .game-screen .reload-action { display: none; }
       }
     }
 
+    static makeKillFx2(fx, item) {
+      const R = Math.random;
+      const id = item.id;
+      if (id === "kf_pixel") {
+        fx.max = 1.0;
+        const palette = ["#ff4d6d", "#ffd166", "#06d6a0", "#4cc9f0", "#b5179e"];
+        for (let i = 0; i < 24; i++) fx.p.push({ a: R() * TAU, v: 30 + R() * 90, c: palette[i % 5] });
+      } else if (id === "kf_shockwave") {
+        fx.max = 0.95;
+        for (let i = 0; i < 14; i++) fx.p.push({ a: R() * TAU, v: 30 + R() * 50, s: 3 + R() * 3 });
+      } else if (id === "kf_slash") {
+        fx.max = 0.75;
+      } else if (id === "kf_heart") {
+        fx.max = 1.4;
+        for (let i = 0; i < 10; i++) fx.p.push({ x: (R() - 0.5) * 50, v: 30 + R() * 55, s: 5 + R() * 4, d: R() * 0.3 });
+      } else if (id === "kf_toxic") {
+        fx.max = 1.5;
+        for (let i = 0; i < 9; i++) fx.p.push({ x: (R() - 0.5) * 36, y: (R() - 0.5) * 26, s: 11 + R() * 11, d: R() * 0.35 });
+        for (let i = 0; i < 8; i++) fx.p.push({ x: (R() - 0.5) * 40, v: 20 + R() * 40, s: 1.6 + R() * 2, bubble: true });
+      } else if (id === "kf_flame") {
+        fx.max = 1.1;
+        for (let i = 0; i < 18; i++) fx.p.push({ a: -Math.PI / 2 + (R() - 0.5) * 1.5, v: 40 + R() * 80, s: 6 + R() * 6 });
+      } else if (id === "kf_skull") {
+        fx.max = 1.3;
+      } else if (id === "kf_meteor") {
+        fx.max = 1.1;
+        for (let i = 0; i < 12; i++) fx.p.push({ a: R() * TAU, v: 50 + R() * 90, s: 2 + R() * 3 });
+      } else if (id === "kf_nova") {
+        fx.max = 1.1;
+      } else if (id === "kf_angel") {
+        fx.max = 1.6;
+        for (let i = 0; i < 9; i++) fx.p.push({ x: (R() - 0.5) * 70, y: -20 - R() * 20, v: 20 + R() * 40, s: 2 + R() * 2, r: R() * TAU });
+      }
+    }
+
+    static drawKillFx2(ctx, fx, k) {
+      const id = fx.id;
+      const t = fx.t;
+      if (id === "kf_pixel") {
+        const e = 1 - (1 - k) * (1 - k);
+        ctx.globalAlpha = 1 - k * k;
+        for (const d of fx.p) {
+          const px = Math.round(Math.cos(d.a) * d.v * e / 4) * 4;
+          const py = Math.round(Math.sin(d.a) * d.v * e / 4) * 4;
+          ctx.fillStyle = d.c;
+          ctx.fillRect(px - 2, py - 2, 4, 4);
+        }
+      } else if (id === "kf_shockwave") {
+        for (let i = 0; i < 3; i++) {
+          const lk = clamp((t - i * 0.1) / 0.6, 0, 1);
+          if (lk <= 0 || lk >= 1) continue;
+          ctx.globalAlpha = (1 - lk) * 0.85;
+          ctx.strokeStyle = i === 0 ? "#ffffff" : "#cfe6ff";
+          ctx.lineWidth = 4 * (1 - lk) + 1;
+          ctx.beginPath();
+          ctx.arc(0, 0, 8 + 72 * lk, 0, TAU);
+          ctx.stroke();
+        }
+        ctx.fillStyle = "#b9b4a8";
+        for (const d of fx.p) {
+          ctx.globalAlpha = (1 - k) * 0.6;
+          ctx.beginPath();
+          ctx.arc(Math.cos(d.a) * d.v * k * 1.3, Math.sin(d.a) * d.v * k * 1.3, d.s * (1 + k), 0, TAU);
+          ctx.fill();
+        }
+      } else if (id === "kf_slash") {
+        ctx.lineCap = "round";
+        ctx.shadowColor = "#ff3b3b";
+        ctx.shadowBlur = 14;
+        const lines = [[-42, -42, 42, 42, 0], [42, -42, -42, 42, 0.12]];
+        for (const [x1, y1, x2, y2, delay] of lines) {
+          const lk = clamp((t - delay) / 0.2, 0, 1);
+          if (lk <= 0) continue;
+          ctx.globalAlpha = Math.max(0, 1 - k * k);
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 5 * (1 - k) + 1.5;
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x1 + (x2 - x1) * lk, y1 + (y2 - y1) * lk);
+          ctx.stroke();
+        }
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha = Math.max(0, 0.5 - k);
+        ctx.fillStyle = "#ff5a5a";
+        ctx.beginPath();
+        ctx.arc(0, 0, 18 + 24 * k, 0, TAU);
+        ctx.fill();
+      } else if (id === "kf_heart") {
+        for (const h of fx.p) {
+          const lk = clamp((t - h.d) / (fx.max - h.d), 0, 1);
+          if (lk <= 0) continue;
+          const y = -h.v * lk * 1.4;
+          const x = h.x * (0.4 + lk * 0.6) + Math.sin(lk * 6 + h.x) * 4;
+          const s = h.s * (0.6 + 0.4 * Math.sin(lk * Math.PI));
+          ctx.globalAlpha = 1 - lk * lk;
+          ctx.fillStyle = "#ff7ab8";
+          ctx.beginPath();
+          ctx.moveTo(x, y + s * 0.35);
+          ctx.bezierCurveTo(x - s, y - s * 0.4, x - s * 0.6, y - s, x, y - s * 0.35);
+          ctx.bezierCurveTo(x + s * 0.6, y - s, x + s, y - s * 0.4, x, y + s * 0.35);
+          ctx.fill();
+        }
+        ctx.globalAlpha = (1 - k) * 0.7;
+        ctx.strokeStyle = "#ffb3d4";
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(0, 0, 8 + 34 * k, 0, TAU);
+        ctx.stroke();
+      } else if (id === "kf_toxic") {
+        for (const c of fx.p) {
+          if (c.bubble) {
+            ctx.globalAlpha = (1 - k) * 0.8;
+            ctx.strokeStyle = "#d6ff9a";
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.arc(c.x, -c.v * k, c.s, 0, TAU);
+            ctx.stroke();
+            continue;
+          }
+          const lk = clamp((t - c.d) / (fx.max - c.d), 0, 1);
+          if (lk <= 0) continue;
+          const r = c.s * (0.4 + 0.9 * lk);
+          const g = ctx.createRadialGradient(c.x, c.y - lk * 10, 0, c.x, c.y - lk * 10, r);
+          g.addColorStop(0, `rgba(157,255,77,${0.6 * (1 - lk)})`);
+          g.addColorStop(1, "rgba(60,160,30,0)");
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(c.x, c.y - lk * 10, r, 0, TAU);
+          ctx.fill();
+        }
+      } else if (id === "kf_flame") {
+        const e = 1 - (1 - k) * (1 - k);
+        const base = ctx.createRadialGradient(0, 0, 0, 0, 0, 26);
+        base.addColorStop(0, `rgba(255,210,120,${0.8 * (1 - k)})`);
+        base.addColorStop(1, "rgba(255,90,30,0)");
+        ctx.fillStyle = base;
+        ctx.beginPath();
+        ctx.arc(0, 0, 26, 0, TAU);
+        ctx.fill();
+        for (const f of fx.p) {
+          const px = Math.cos(f.a) * f.v * e * 0.55;
+          const py = Math.sin(f.a) * f.v * e;
+          ctx.globalAlpha = Math.max(0, 1 - k * 0.95);
+          ctx.fillStyle = `hsl(${18 + 34 * (1 - k)}, 100%, ${48 + 16 * (1 - k)}%)`;
+          ctx.beginPath();
+          ctx.arc(px, py, f.s * (1 - k * 0.75), 0, TAU);
+          ctx.fill();
+        }
+      } else if (id === "kf_skull") {
+        const y = -k * 58;
+        ctx.globalAlpha = (1 - k) * 0.55;
+        ctx.strokeStyle = "#ff4d4d";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(0, 0, 10 + 56 * k, 0, TAU);
+        ctx.stroke();
+        ctx.globalAlpha = Math.max(0, k < 0.7 ? 1 : (1 - k) / 0.3);
+        ctx.fillStyle = "#f4efe6";
+        ctx.beginPath();
+        ctx.arc(0, y - 3, 10, 0, TAU);
+        ctx.fill();
+        ctx.fillRect(-6, y + 3, 12, 8);
+        ctx.fillStyle = "#3a0d0d";
+        ctx.beginPath();
+        ctx.arc(-4, y - 3, 2.8, 0, TAU);
+        ctx.arc(4, y - 3, 2.8, 0, TAU);
+        ctx.fill();
+        ctx.fillRect(-0.8, y + 1, 1.6, 3);
+      } else if (id === "kf_meteor") {
+        const fall = 0.4;
+        if (k < fall) {
+          const lk = k / fall;
+          const mx = -150 * (1 - lk);
+          const my = -190 * (1 - lk);
+          const grad = ctx.createLinearGradient(mx, my, mx - 70, my - 90);
+          grad.addColorStop(0, "rgba(255,190,90,.9)");
+          grad.addColorStop(1, "rgba(255,90,30,0)");
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 9;
+          ctx.lineCap = "round";
+          ctx.beginPath();
+          ctx.moveTo(mx, my);
+          ctx.lineTo(mx - 70, my - 90);
+          ctx.stroke();
+          ctx.fillStyle = "#ffcf75";
+          ctx.shadowColor = "#ff8a3a";
+          ctx.shadowBlur = 16;
+          ctx.beginPath();
+          ctx.arc(mx, my, 8, 0, TAU);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        } else {
+          const lk = (k - fall) / (1 - fall);
+          ctx.globalAlpha = (1 - lk) * 0.9;
+          ctx.fillStyle = "#fff3c4";
+          ctx.beginPath();
+          ctx.arc(0, 0, 20 * (1 - lk) + 4, 0, TAU);
+          ctx.fill();
+          ctx.strokeStyle = "#ff9a4a";
+          ctx.lineWidth = 5 * (1 - lk) + 1;
+          ctx.beginPath();
+          ctx.arc(0, 0, 10 + 58 * lk, 0, TAU);
+          ctx.stroke();
+          ctx.fillStyle = "#6a5a4a";
+          for (const d of fx.p) {
+            ctx.globalAlpha = 1 - lk;
+            ctx.beginPath();
+            ctx.arc(Math.cos(d.a) * d.v * lk, Math.sin(d.a) * d.v * lk, d.s, 0, TAU);
+            ctx.fill();
+          }
+        }
+      } else if (id === "kf_nova") {
+        const e = 1 - (1 - k) * (1 - k);
+        const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 34);
+        glow.addColorStop(0, `rgba(255,255,255,${1 - k})`);
+        glow.addColorStop(1, "rgba(255,200,120,0)");
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(0, 0, 34, 0, TAU);
+        ctx.fill();
+        for (let i = 0; i < 12; i++) {
+          const a = i * TAU / 12 + k * 1.5;
+          ctx.globalAlpha = 1 - k;
+          ctx.strokeStyle = i % 2 ? "#fff6a8" : "#ff9ad1";
+          ctx.lineWidth = 3 * (1 - k) + 0.6;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(a) * 6, Math.sin(a) * 6);
+          ctx.lineTo(Math.cos(a) * (14 + 82 * e), Math.sin(a) * (14 + 82 * e));
+          ctx.stroke();
+        }
+        for (let i = 0; i < 2; i++) {
+          ctx.globalAlpha = (1 - k) * 0.8;
+          ctx.strokeStyle = i ? "#6ff3ff" : "#ffd166";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(0, 0, (10 + 60 * e) * (1 - i * 0.35), 0, TAU);
+          ctx.stroke();
+        }
+      } else if (id === "kf_angel") {
+        const rise = -k * 30;
+        const open = clamp(k / 0.28, 0, 1);
+        const a = k < 0.7 ? 1 : Math.max(0, (1 - k) / 0.3);
+        ctx.globalAlpha = a;
+        for (const side of [-1, 1]) {
+          for (let i = 0; i < 4; i++) {
+            ctx.fillStyle = i % 2 ? "#fff6dc" : "#ffffff";
+            ctx.beginPath();
+            ctx.ellipse(side * (8 + i * 9 * open), rise - 4 - i * 3 * open, (16 - i * 2) * open + 0.1, 4.2, side * (-0.35 - i * 0.16) * open, 0, TAU);
+            ctx.fill();
+          }
+        }
+        ctx.strokeStyle = "#ffd45a";
+        ctx.lineWidth = 2.2;
+        ctx.shadowColor = "#ffd45a";
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.ellipse(0, rise - 22, 8, 3, 0, 0, TAU);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "#ffffff";
+        for (const f of fx.p) {
+          ctx.globalAlpha = a * 0.8;
+          ctx.save();
+          ctx.translate(f.x, f.y + f.v * k * 1.6);
+          ctx.rotate(f.r + k * 4);
+          ctx.beginPath();
+          ctx.ellipse(0, 0, f.s * 1.6, f.s * 0.6, 0, 0, TAU);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+    }
+
     static makeKillFx(item, x, y) {
       const R = Math.random;
       const fx = { id: item.id, x, y, t: 0, max: 1.2, p: [] };
@@ -1134,6 +1514,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       } else if (item.id === "kf_fireworks") {
         fx.max = 1.3;
       }
+      this.makeKillFx2(fx, item);
       return fx;
     }
 
@@ -1288,21 +1669,22 @@ body.mobile-game .game-screen .reload-action { display: none; }
           }
         }
       }
+      this.drawKillFx2(ctx, fx, k);
       ctx.restore();
     }
 
-    static spawnKill(game, x, y) {
-      const item = Cosmetics.equipped("killfx");
+    static spawnKill(game, x, y, itemArg) {
+      const item = itemArg || Cosmetics.equipped("killfx");
       if (item.id === "kf_default") return;
       (game.fx ||= []).push(this.makeKillFx(item, x, y));
       if (item.id === "kf_lightning") { game.addShake(6); game.audio.play("explosion"); }
-      if (item.id === "kf_blackhole") game.addShake(4);
+      if (item.id === "kf_blackhole" || item.id === "kf_nova") game.addShake(4);
+      if (item.id === "kf_meteor") { game.addShake(5); game.audio.play("explosion"); }
+      if (item.id === "kf_shockwave" || item.id === "kf_skull" || item.id === "kf_slash") game.addShake(3);
     }
 
-    static tick(game, dt, now) {
-      const p = game.player;
-      if (!p || !p.alive) return;
-      const aura = Cosmetics.equipped("aura");
+    static auraParticles(game, p, aura, dt) {
+      if (!aura) return;
       if (aura.kind === "flame" && p.moving && Math.random() < dt * 45) {
         game.particles.emitColor(p.x, p.y + 2, [aura.color, "#ffd36b", "#fff2bd"], 1, 38, 0.55, 3.6);
       } else if (aura.kind === "frost" && p.moving && Math.random() < dt * 32) {
@@ -1313,6 +1695,18 @@ body.mobile-game .game-screen .reload-action { display: none; }
         game.particles.emitColor(p.x, p.y + 2, [aura.color, "#3a1c8f", "#c9a8ff"], 1, 26, 0.8, 4);
       } else if (aura.kind === "storm" && Math.random() < dt * 10) {
         game.particles.emitColor(p.x, p.y, [aura.color, "#ffffff"], 1, 60, 0.3, 2.4);
+      }
+    }
+
+    static tick(game, dt, now) {
+      const p = game.player;
+      if (!p) return;
+      if (p.alive) this.auraParticles(game, p, Cosmetics.equipped("aura"), dt);
+      if (game.quality === "LOW") return;
+      for (const bot of game.bots) {
+        if (!bot.alive || !bot.cosmetics) continue;
+        if (Math.abs(bot.x - p.x) > 520 || Math.abs(bot.y - p.y) > 340) continue;
+        this.auraParticles(game, bot, bot.cosmetics.aura, dt * 0.7);
       }
     }
 
@@ -1657,6 +2051,278 @@ body.mobile-game .game-screen .reload-action { display: none; }
     }
   }
 
+  /* ---------------- MAPS: 12 themed arenas, unlocked by level + total play time ---------------- */
+  const MAP_SIZE = 3600;
+  const MAP_PALETTE_MARKS = ["rgba(24,48,31,.13)", "rgba(190,177,103,.10)", "rgba(190,202,128,.08)", "rgba(20,59,39,.10)"];
+  const MAPS = [
+    { id: "map_lastlight", name: "Last Light", sub: "Dusty roads, farms and open fields", level: 1, minutes: 0, theme: {
+      ground: "#536d48", marks: MAP_PALETTE_MARKS, mini: "#3f5941", roadStyle: "cross", road: "#817958", roadEdge: "rgba(200,185,129,.18)", roadDash: "rgba(226,211,158,.33)", miniRoad: "#897d58",
+      bTints: ["#76684c", "#857754", "#6d6854", "#95805b"], bEdge: "#4c493b", bSkip: 0.18,
+      trees: { kind: "round", count: 110, shades: ["#324b37", "#3c5b3b", "#2e563d", "#516848"] },
+      rocks: { count: 54, shades: ["#73746a", "#8b8879", "#676e69"] }, walls: { count: 64, tints: ["#97927c", "#7e8473", "#a59b7e"] }, decor: null, ambient: null } },
+    { id: "map_dunes", name: "Desert Dunes", sub: "Scorched sand, cacti and sandstone ruins", level: 3, minutes: 10, theme: {
+      ground: "#c8a96a", marks: ["rgba(150,110,50,.12)", "rgba(255,230,170,.14)"], mini: "#b79a5c", roadStyle: "cross", road: "#a98a55", roadEdge: "rgba(255,235,180,.14)", roadDash: "rgba(255,240,200,.25)", miniRoad: "#9a7b4a",
+      bTints: ["#b88f5a", "#c49a62", "#a67c4a", "#d0a770"], bEdge: "#6f5530", bSkip: 0.3,
+      trees: { kind: "cactus", count: 70, shades: ["#4d7a3c", "#5a8a45", "#456f38"] },
+      rocks: { count: 76, shades: ["#b4764a", "#a2673c", "#c58a5a"] }, walls: { count: 50, tints: ["#c9b080", "#b89d70", "#d3bb8c"] },
+      decor: { style: "soft", count: 30, colors: ["rgba(255,225,160,.24)", "rgba(160,110,50,.12)"] }, ambient: { rgb: "255,190,90", alpha: 0.06 } } },
+    { id: "map_tundra", name: "Frozen Tundra", sub: "Snowfields, pines and frozen outposts", level: 5, minutes: 25, theme: {
+      ground: "#d6e4ec", marks: ["rgba(255,255,255,.4)", "rgba(150,185,210,.18)"], mini: "#b9ccd8", roadStyle: "cross", road: "#aebfcb", roadEdge: "rgba(255,255,255,.32)", roadDash: "rgba(255,255,255,.45)", miniRoad: "#9fb2c0",
+      bTints: ["#8fa3b3", "#9bb0c0", "#7d93a4"], bEdge: "#4c5d6b", bSkip: 0.25, snow: true,
+      trees: { kind: "pine", count: 130, shades: ["#2f5a47", "#386650", "#2a4f3f"] },
+      rocks: { count: 60, shades: ["#b8d4e6", "#a3c3da", "#c6dcec"] }, walls: { count: 46, tints: ["#c9dbe6", "#b4c9d6"] },
+      decor: { style: "soft", count: 30, colors: ["rgba(255,255,255,.55)", "rgba(140,190,225,.3)"] }, ambient: { rgb: "180,220,255", alpha: 0.05 } } },
+    { id: "map_night", name: "Night Forest", sub: "Dense woods, fireflies and darkness", level: 7, minutes: 45, theme: {
+      ground: "#1d3125", marks: ["rgba(10,25,15,.3)", "rgba(60,90,70,.15)"], mini: "#14241b", roadStyle: "cross", road: "#3a3526", roadEdge: "rgba(120,110,80,.12)", roadDash: "rgba(160,150,110,.18)", miniRoad: "#3f3a2a",
+      bTints: ["#4a4636", "#3d3a2e", "#554a38"], bEdge: "#1f1d16", bSkip: 0.45,
+      trees: { kind: "round", count: 230, shades: ["#16301f", "#1c3a26", "#12281a"] },
+      rocks: { count: 50, shades: ["#3a403c", "#444b46"] }, walls: { count: 30, tints: ["#4a4636", "#3d3a2e"] },
+      decor: { style: "fireflies", count: 70, colors: ["#e6ff7a"] }, ambient: { rgb: "5,10,30", alpha: 0.3 } } },
+    { id: "map_beach", name: "Paradise Beach", sub: "Palm trees, lagoons and beach huts", level: 9, minutes: 60, theme: {
+      ground: "#e0cf9f", marks: ["rgba(180,150,90,.14)", "rgba(255,255,255,.18)"], mini: "#cdbd8c", roadStyle: "none", road: "#cdb98a", roadEdge: "rgba(255,255,255,.2)", roadDash: "rgba(255,255,255,.2)", miniRoad: "#c4b07f",
+      bTints: ["#e8d8b8", "#d8c6a0", "#f0e2c0", "#c9a977"], bEdge: "#8a7650", bSkip: 0.32,
+      trees: { kind: "palm", count: 120, shades: ["#3f8a4a", "#4a9a52", "#35783f"] },
+      rocks: { count: 40, shades: ["#cfc4a8", "#bdb294"] }, walls: { count: 40, tints: ["#b08a55", "#9c7a4a"] },
+      decor: { style: "water", count: 20, colors: ["rgba(70,170,190,.75)", "rgba(190,240,245,.45)"] }, ambient: { rgb: "120,210,255", alpha: 0.04 } } },
+    { id: "map_ash", name: "Volcano Ashlands", sub: "Lava pools, ash and a ring road", level: 11, minutes: 80, theme: {
+      ground: "#3b3330", marks: ["rgba(0,0,0,.25)", "rgba(255,120,40,.07)"], mini: "#2c2523", roadStyle: "ring", road: "#2a2423", roadEdge: "rgba(255,110,40,.2)", roadDash: "rgba(255,150,60,.28)", miniRoad: "#4a3a34",
+      bTints: ["#4a3d38", "#554540", "#3f3330"], bEdge: "#1c1514", bSkip: 0.3,
+      trees: { kind: "dead", count: 60, shades: ["#2a2220", "#35292a"] },
+      rocks: { count: 90, kind: "lava", shades: ["#241d1b", "#302624", "#3a2d29"] }, walls: { count: 45, tints: ["#3b302c", "#4a3a34"] },
+      decor: { style: "glow", count: 22, colors: ["#ff7a1f", "#ffd27a"] }, ambient: { rgb: "255,80,20", alpha: 0.07 } } },
+    { id: "map_swamp", name: "Misty Swamp", sub: "Murky pools, mangroves and stilt huts", level: 13, minutes: 105, theme: {
+      ground: "#3c5538", marks: ["rgba(15,35,20,.25)", "rgba(120,150,80,.12)"], mini: "#2e4430", roadStyle: "none", road: "#4f4a30", roadEdge: "rgba(0,0,0,.1)", roadDash: "rgba(0,0,0,.1)", miniRoad: "#4f4a30",
+      bTints: ["#5a523a", "#4a4630", "#665a3e"], bEdge: "#2c2a1c", bSkip: 0.38,
+      trees: { kind: "round", count: 180, shades: ["#2a4a2c", "#335a34", "#244024"] },
+      rocks: { count: 40, shades: ["#5a6a52", "#4a5a44"] }, walls: { count: 40, tints: ["#5e4b30", "#4e3f28"] },
+      decor: { style: "water", count: 34, colors: ["rgba(60,110,110,.78)", "rgba(120,170,160,.35)"] }, ambient: { rgb: "120,170,120", alpha: 0.07 } } },
+    { id: "map_autumn", name: "Autumn Valley", sub: "Golden woods, barns and falling leaves", level: 16, minutes: 140, theme: {
+      ground: "#7a6a3a", marks: ["rgba(200,100,30,.14)", "rgba(240,190,80,.12)"], mini: "#625530", roadStyle: "cross", road: "#8d7a4f", roadEdge: "rgba(240,210,140,.16)", roadDash: "rgba(240,210,140,.28)", miniRoad: "#8d7a4f",
+      bTints: ["#8a4a34", "#9a5a3a", "#7a4a30", "#a46a42"], bEdge: "#4a2a1c", bSkip: 0.2,
+      trees: { kind: "round", count: 170, shades: ["#c0561f", "#d8892a", "#b8431f", "#e0a43a"] },
+      rocks: { count: 50, shades: ["#7a6e58", "#8a7e66"] }, walls: { count: 70, tints: ["#8a6a3a", "#7a5a30"] },
+      decor: { style: "soft", count: 40, colors: ["rgba(215,110,30,.3)", "rgba(240,180,60,.2)"] }, ambient: { rgb: "255,160,60", alpha: 0.05 } } },
+    { id: "map_neon", name: "Neon City", sub: "Dense city blocks lit by neon", level: 19, minutes: 180, theme: {
+      ground: "#171a26", marks: ["rgba(0,229,255,.05)", "rgba(255,43,214,.05)"], mini: "#11131d", roadStyle: "grid", road: "#242838", roadEdge: "rgba(0,229,255,.28)", roadDash: "rgba(255,43,214,.5)", miniRoad: "#2c3150",
+      bTints: ["#262a3d", "#2d3248", "#202438", "#34304a"], bEdge: "#0c0e16", bSkip: 0.06, bSize: [[130, 230], [110, 200]], neon: ["#00e5ff", "#ff2bd6", "#7a2bff", "#38ff9a"],
+      trees: { kind: "round", count: 24, shades: ["#1f3a46", "#24464f"] },
+      rocks: { count: 20, shades: ["#3a3f52", "#454b60"] }, walls: { count: 80, tints: ["#2b3047", "#383d5a"], neonWalls: true },
+      decor: null, ambient: { rgb: "20,10,60", alpha: 0.14 } } },
+    { id: "map_industrial", name: "Industrial Yard", sub: "Container maze and warehouses", level: 22, minutes: 230, theme: {
+      ground: "#6b6e70", marks: ["rgba(0,0,0,.14)", "rgba(255,255,255,.07)"], mini: "#575a5c", roadStyle: "grid", road: "#3d4043", roadEdge: "rgba(255,210,60,.35)", roadDash: "rgba(255,210,60,.55)", miniRoad: "#44484b",
+      bTints: ["#7b8187", "#6f757b", "#8a7d63", "#5f666d"], bEdge: "#2c2f32", bSkip: 0.12, bSize: [[140, 240], [110, 190]],
+      trees: { kind: "round", count: 14, shades: ["#4a5a44"] },
+      rocks: { count: 30, shades: ["#8a8d90", "#7a7d80"] }, walls: { count: 130, tints: ["#b5532e", "#3e6fa0", "#d7a024", "#4c8a5c"], stripes: true },
+      decor: { style: "soft", count: 22, colors: ["rgba(20,20,20,.35)", "rgba(0,0,0,.2)"] }, ambient: null } },
+    { id: "map_blossom", name: "Cherry Blossom", sub: "Pink groves and old pagodas", level: 26, minutes: 290, theme: {
+      ground: "#9bb584", marks: ["rgba(255,190,210,.25)", "rgba(255,255,255,.12)"], mini: "#7f9b6e", roadStyle: "cross", road: "#c9b79a", roadEdge: "rgba(255,255,255,.25)", roadDash: "rgba(255,255,255,.35)", miniRoad: "#b9a78a",
+      bTints: ["#a8483a", "#8f3b30", "#b85a46", "#c26a52"], bEdge: "#4a2320", bSkip: 0.22,
+      trees: { kind: "blossom", count: 160, shades: ["#f4a6c0", "#f7bdd0", "#e88fb0"] },
+      rocks: { count: 50, shades: ["#9aa3a8", "#8a9398"] }, walls: { count: 50, tints: ["#b9a58a", "#a8947a"] },
+      decor: { style: "soft", count: 40, colors: ["rgba(255,200,220,.35)", "rgba(255,255,255,.2)"] }, ambient: { rgb: "255,190,210", alpha: 0.05 } } },
+    { id: "map_waste", name: "Toxic Wasteland", sub: "Radioactive pools and rusted ruins", level: 30, minutes: 360, theme: {
+      ground: "#4e5a34", marks: ["rgba(150,255,60,.08)", "rgba(0,0,0,.2)"], mini: "#3c4628", roadStyle: "cross", road: "#3d3b2a", roadEdge: "rgba(170,255,70,.22)", roadDash: "rgba(190,255,100,.3)", miniRoad: "#55523a",
+      bTints: ["#7a4a2a", "#6a3f26", "#5a5240", "#6e5236"], bEdge: "#2a1c12", bSkip: 0.25,
+      trees: { kind: "dead", count: 70, shades: ["#3a3a2a", "#454532"] },
+      rocks: { count: 80, shades: ["#6b6a50", "#5a5a46"] }, walls: { count: 80, tints: ["#8a4f2c", "#6e4326"] },
+      decor: { style: "glow", count: 26, colors: ["#8dff3a", "#d4ff7a"] }, ambient: { rgb: "120,255,60", alpha: 0.06 } } },
+  ];
+
+  class Maps {
+    static get(id) { return MAPS.find((map) => map.id === id) || MAPS[0]; }
+    static state(map) {
+      const d = this.save.data;
+      const minutes = (d.playTime || 0) / 60;
+      const levelOk = d.level >= map.level;
+      const timeOk = minutes >= map.minutes;
+      return { levelOk, timeOk, minutes, unlocked: levelOk && timeOk };
+    }
+    static current() {
+      const map = this.get(this.save?.data?.mapId);
+      return this.save && this.state(map).unlocked ? map : MAPS[0];
+    }
+    static unlockedCount() { return MAPS.filter((map) => this.state(map).unlocked).length; }
+    static newCount() {
+      const seen = this.save.data.mapsSeen || [];
+      return MAPS.filter((map) => this.state(map).unlocked && !seen.includes(map.id)).length;
+    }
+    static fmtTime(minutes) {
+      const m = Math.floor(minutes);
+      return m >= 60 ? `${Math.floor(m / 60)}h ${m % 60}m` : `${m}m`;
+    }
+  }
+
+  class MapArt {
+    static paint(canvas, theme, seed = 1) {
+      const ctx = canvas.getContext("2d");
+      const W = canvas.width;
+      let s = seed * 9301 + 49297;
+      const rnd = () => ((s = (s * 9301 + 49297) % 233280) / 233280);
+      const k = W / 3600;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.fillStyle = theme.ground;
+      ctx.fillRect(0, 0, W, W);
+      ctx.fillStyle = theme.marks[0];
+      for (let i = 0; i < 40; i++) ctx.fillRect(rnd() * W, rnd() * W, 2 + rnd() * 5, 2);
+      const road = (x, y, w, h) => { ctx.fillStyle = theme.road; ctx.fillRect(x * k, y * k, Math.max(2, w * k), Math.max(2, h * k)); };
+      if (theme.roadStyle === "cross" || theme.roadStyle === "ring") { road(1709, 0, 182, 3600); road(0, 1717, 3600, 166); }
+      if (theme.roadStyle === "grid") for (const f of [0.22, 0.5, 0.78]) { road(3600 * f - 70, 0, 140, 3600); road(0, 3600 * f - 70, 3600, 140); }
+      if (theme.roadStyle === "ring") {
+        ctx.strokeStyle = theme.road;
+        ctx.lineWidth = Math.max(3, 96 * k);
+        ctx.beginPath();
+        ctx.arc(W / 2, W / 2, 900 * k, 0, TAU);
+        ctx.stroke();
+      }
+      if (theme.decor && theme.decor.style !== "fireflies") {
+        const g = theme.decor.style === "glow";
+        for (let i = 0; i < Math.min(theme.decor.count, 16); i++) {
+          const x = rnd() * W;
+          const y = rnd() * W;
+          ctx.fillStyle = g ? theme.decor.colors[0] : theme.decor.colors[0];
+          ctx.beginPath();
+          ctx.ellipse(x, y, (g ? 5 : 11) * (W / 120), (g ? 4 : 7) * (W / 120), rnd() * 3, 0, TAU);
+          ctx.fill();
+        }
+      }
+      const bw = theme.bSize ? 190 : 160;
+      for (let i = 0; i < 16; i++) {
+        const x = 300 + rnd() * 3000;
+        const y = 300 + rnd() * 3000;
+        if (Math.abs(x - 1800) < 230 || Math.abs(y - 1800) < 230) continue;
+        const w = bw * (0.8 + rnd() * 0.5) * k * 1.4;
+        const h = w * 0.75;
+        ctx.fillStyle = theme.bTints[i % theme.bTints.length];
+        ctx.fillRect(x * k, y * k, w, h);
+        if (theme.neon) { ctx.strokeStyle = theme.neon[i % theme.neon.length]; ctx.lineWidth = 1.5; ctx.strokeRect(x * k, y * k, w, h); }
+        if (theme.snow) { ctx.fillStyle = "rgba(255,255,255,.6)"; ctx.fillRect(x * k, y * k, w, h * 0.5); }
+      }
+      const kind = theme.trees.kind;
+      for (let i = 0; i < 44; i++) {
+        const x = rnd() * W;
+        const y = rnd() * W;
+        if (Math.abs(x - W / 2) < W * 0.07 || Math.abs(y - W / 2) < W * 0.07) continue;
+        const shade = theme.trees.shades[i % theme.trees.shades.length];
+        const r = Math.max(2.4, W / 55);
+        ctx.fillStyle = shade;
+        ctx.beginPath();
+        if (kind === "pine") { ctx.moveTo(x - r, y + r); ctx.lineTo(x + r, y + r); ctx.lineTo(x, y - r * 1.4); ctx.closePath(); }
+        else if (kind === "cactus") { ctx.rect(x - r * 0.3, y - r, r * 0.6, r * 1.8); ctx.rect(x - r, y - r * 0.2, r * 2, r * 0.4); }
+        else if (kind === "dead") { ctx.rect(x - 1, y - r, 2, r * 1.6); }
+        else ctx.arc(x, y, r, 0, TAU);
+        ctx.fill();
+      }
+      ctx.fillStyle = theme.rocks.shades[0];
+      for (let i = 0; i < 8; i++) { ctx.beginPath(); ctx.arc(rnd() * W, rnd() * W, Math.max(1.6, W / 70), 0, TAU); ctx.fill(); }
+      if (theme.ambient) { ctx.fillStyle = `rgba(${theme.ambient.rgb},${Math.min(0.5, theme.ambient.alpha * 2.2)})`; ctx.fillRect(0, 0, W, W); }
+    }
+  }
+
+  class MapSelect {
+    static init(save) {
+      Maps.save = save;
+      this.sel = null;
+      this.canvas = $("#maps-canvas");
+      $("#btn-map")?.addEventListener("click", () => this.open());
+      $("#maps-back")?.addEventListener("click", () => this.close());
+      $("#maps-grid")?.addEventListener("click", (event) => {
+        const card = event.target.closest(".locker-card");
+        if (!card) return;
+        this.sel = card.dataset.id;
+        audioSystem?.play("button");
+        this.render();
+      });
+      $("#maps-action")?.addEventListener("click", () => this.act());
+    }
+
+    static open() {
+      audioSystem?.play("button");
+      this.sel = Maps.current().id;
+      const d = Maps.save.data;
+      d.mapsSeen = MAPS.filter((map) => Maps.state(map).unlocked).map((map) => map.id);
+      Maps.save.save();
+      this.render();
+      UI.setScreen("maps");
+    }
+
+    static close() {
+      audioSystem?.play("button");
+      UI.setScreen("menu");
+      UI.refreshProfile();
+    }
+
+    static syncChip() {
+      if (!Maps.save) return;
+      const name = $("#map-chip-name");
+      if (name) name.textContent = Maps.current().name.toUpperCase();
+      const count = $("#map-chip-count");
+      if (count) count.textContent = `${Maps.unlockedCount()} / ${MAPS.length}`;
+      $("#btn-map")?.classList.toggle("has-new", Maps.newCount() > 0);
+    }
+
+    static toast(text) {
+      const node = $("#maps-toast");
+      if (!node) return;
+      node.textContent = text;
+      node.classList.remove("is-show");
+      void node.offsetWidth;
+      node.classList.add("is-show");
+    }
+
+    static req(map) {
+      const st = Maps.state(map);
+      const d = Maps.save.data;
+      const bar = (label, have, need, ok) => `<div class="map-req-row${ok ? " is-ok" : ""}"><span>${label}</span><i><u style="width:${Math.min(100, need ? have / need * 100 : 100)}%"></u></i><b>${ok ? "✓" : ""}</b></div>`;
+      return bar(`LEVEL ${Math.min(d.level, map.level)} / ${map.level}`, d.level, map.level, st.levelOk) + bar(`PLAY TIME ${Maps.fmtTime(Math.min(st.minutes, map.minutes))} / ${Maps.fmtTime(map.minutes)}`, st.minutes, map.minutes, st.timeOk);
+    }
+
+    static render() {
+      const d = Maps.save.data;
+      $("#maps-level").textContent = String(d.level);
+      $("#maps-time").textContent = Maps.fmtTime((d.playTime || 0) / 60);
+      const grid = $("#maps-grid");
+      grid.innerHTML = MAPS.map((map) => {
+        const st = Maps.state(map);
+        const current = map.id === Maps.current().id;
+        const text = !st.unlocked ? `🔒 LV ${map.level} · ${Maps.fmtTime(map.minutes)}` : current ? "SELECTED" : "UNLOCKED";
+        const cls = !st.unlocked ? "is-lock" : current ? "is-equipped" : "is-owned";
+        return `<button type="button" class="locker-card map-card${map.id === this.sel ? " is-selected" : ""}${!st.unlocked ? " is-locked" : ""}" data-id="${map.id}" style="--rc:${st.unlocked ? "#c6db78" : "#6b776b"}"><canvas class="map-thumb" data-map="${map.id}" width="96" height="96"></canvas><b>${map.name}</b><span class="lc-state ${cls}">${text}</span></button>`;
+      }).join("");
+      grid.querySelectorAll(".map-thumb").forEach((canvas, i) => MapArt.paint(canvas, MAPS[i].theme, i + 3));
+      const map = Maps.get(this.sel);
+      const st = Maps.state(map);
+      MapArt.paint(this.canvas, map.theme, MAPS.indexOf(map) + 3);
+      $("#maps-name").textContent = map.name.toUpperCase();
+      $("#maps-sub").textContent = map.sub;
+      $("#maps-req").innerHTML = this.req(map);
+      const button = $("#maps-action");
+      const current = map.id === Maps.current().id;
+      if (!st.unlocked) {
+        const parts = [];
+        if (!st.levelOk) parts.push(`REACH LEVEL ${map.level}`);
+        if (!st.timeOk) parts.push(`PLAY ${Math.ceil(map.minutes - st.minutes)} MORE MIN`);
+        button.textContent = parts.join(" · ");
+        button.disabled = true;
+      } else if (current) {
+        button.textContent = "SELECTED ✓";
+        button.disabled = true;
+      } else {
+        button.textContent = "SELECT MAP";
+        button.disabled = false;
+      }
+    }
+
+    static act() {
+      const map = Maps.get(this.sel);
+      if (!Maps.state(map).unlocked) return;
+      Maps.save.data.mapId = map.id;
+      Maps.save.save();
+      audioSystem?.play("pickup");
+      this.toast(`${map.name.toUpperCase()} SELECTED`);
+      this.render();
+    }
+  }
+
   class SaveSystem {
     constructor() {
       this.key = "last-circle-save-v1";
@@ -1668,6 +2334,9 @@ body.mobile-game .game-screen .reload-action { display: none; }
         highScore: 0,
         totalKills: 0,
         wins: 0,
+        playTime: 0,
+        mapId: "map_lastlight",
+        mapsSeen: ["map_lastlight"],
         owned: ["skin_default", "tr_default", "au_none", "av_default", "bn_default", "kf_default"],
         equipped: { skin: "skin_default", tracer: "tr_default", aura: "au_none", avatar: "av_default", banner: "bn_default", killfx: "kf_default" },
         bestPlacement: 22,
@@ -1706,6 +2375,9 @@ body.mobile-game .game-screen .reload-action { display: none; }
     normalize(data) {
       const base = clone(this.defaults);
       data.wins = Math.max(0, Number(data.wins) || 0);
+      data.playTime = Math.max(0, Number(data.playTime) || 0);
+      data.mapId = typeof data.mapId === "string" ? data.mapId : base.mapId;
+      data.mapsSeen = Array.isArray(data.mapsSeen) ? data.mapsSeen.filter((id) => typeof id === "string") : [...base.mapsSeen];
       data.owned = Array.isArray(data.owned) ? data.owned.filter((id) => typeof id === "string") : [];
       for (const id of base.owned) if (!data.owned.includes(id)) data.owned.push(id);
       data.equipped = { ...base.equipped, ...(data.equipped && typeof data.equipped === "object" ? data.equipped : {}) };
@@ -1931,12 +2603,16 @@ body.mobile-game .game-screen .reload-action { display: none; }
   }
 
   class MapSystem {
-    constructor(size = 3600) {
+    constructor(size = 3600, theme = MAPS[0].theme) {
       this.size = size;
+      this.theme = theme;
       this.objects = [];
       this.index = new Map();
       this.cellSize = 260;
       this.grassMarks = [];
+      this.roadRects = [];
+      this.roadRings = [];
+      this.decor = [];
       this.generate();
     }
 
@@ -1981,87 +2657,144 @@ body.mobile-game .game-screen .reload-action { display: none; }
       return false;
     }
 
+    onRoad(x, y, w, h, pad) {
+      for (const r of this.roadRects) {
+        if (x + w > r.x - pad && x < r.x + r.w + pad && y + h > r.y - pad && y < r.y + r.h + pad) return true;
+      }
+      const c = this.size / 2;
+      for (const ring of this.roadRings) {
+        const d = Math.hypot(x + w / 2 - c, y + h / 2 - c);
+        if (Math.abs(d - ring.r) < ring.w / 2 + pad + Math.max(w, h) / 2) return true;
+      }
+      return false;
+    }
+
     generate() {
+      const t = this.theme;
+      const S = this.size;
+      const c = S / 2;
       for (let i = 0; i < 690; i++) {
-        this.grassMarks.push({
-          x: random(0, this.size),
-          y: random(0, this.size),
-          size: random(2, 10),
-          color: choose(["rgba(24,48,31,.13)", "rgba(190,177,103,.10)", "rgba(190,202,128,.08)", "rgba(20,59,39,.10)"]),
-        });
+        this.grassMarks.push({ x: random(0, S), y: random(0, S), size: random(2, 10), color: choose(t.marks) });
       }
 
-      // Dirt roads form a cross through the wilderness; clear shoulders around each.
+      if (t.roadStyle === "cross" || t.roadStyle === "ring") {
+        this.roadRects.push({ x: c - 91, y: 0, w: 182, h: S }, { x: 0, y: c - 83, w: S, h: 166 });
+      }
+      if (t.roadStyle === "grid") {
+        for (const f of [0.22, 0.5, 0.78]) {
+          this.roadRects.push({ x: S * f - 70, y: 0, w: 140, h: S }, { x: 0, y: S * f - 70, w: S, h: 140 });
+        }
+      }
+      if (t.roadStyle === "ring") this.roadRings.push({ r: 900, w: 96 });
+
+      if (t.decor) {
+        for (let i = 0; i < t.decor.count; i++) {
+          const x = random(80, S - 80);
+          const y = random(80, S - 80);
+          if (Math.hypot(x - c, y - c) < 240) continue;
+          const base = t.decor.style === "glow" ? random(26, 58) : t.decor.style === "water" ? random(40, 105) : random(55, 140);
+          this.decor.push({ x, y, rx: base, ry: base * random(0.55, 0.9), rot: random(0, Math.PI), phase: random(0, TAU) });
+        }
+      }
+
+      const bs = t.bSize || [[115, 205], [92, 180]];
       for (let row = 0; row < 5; row++) {
         for (let col = 0; col < 5; col++) {
           const cellX = 410 + col * 675;
           const cellY = 410 + row * 675;
-          if (Math.abs(cellX + 330 - this.size / 2) < 255 || Math.abs(cellY + 330 - this.size / 2) < 235) continue;
-          if (Math.random() < 0.18) continue;
-          const width = random(115, 205);
-          const height = random(92, 180);
+          if (Math.random() < t.bSkip) continue;
+          const width = random(bs[0][0], bs[0][1]);
+          const height = random(bs[1][0], bs[1][1]);
           const x = cellX + random(60, 385);
           const y = cellY + random(55, 390);
-          if (x < 95 || y < 95 || x + width > this.size - 95 || y + height > this.size - 95) continue;
-          this.add({ type: "building", x, y, w: width, h: height, tint: choose(["#76684c", "#857754", "#6d6854", "#95805b"]) });
+          if (x < 95 || y < 95 || x + width > S - 95 || y + height > S - 95) continue;
+          if (Math.hypot(x + width / 2 - c, y + height / 2 - c) < 175) continue;
+          if (this.onRoad(x, y, width, height, 24)) continue;
+          this.add({ type: "building", x, y, w: width, h: height, tint: choose(t.bTints), neon: t.neon ? choose(t.neon) : null, snow: Boolean(t.snow) });
           this.add({ type: "building", x: x + width + 20, y: y + 18, w: 31, h: 31, deco: true, solid: false, tint: "#3b4036" });
         }
       }
 
-      for (let i = 0; i < 110; i++) {
-        const x = random(45, this.size - 45);
-        const y = random(45, this.size - 45);
-        if (Math.abs(x - this.size / 2) < 150 || Math.abs(y - this.size / 2) < 125) continue;
+      const kind = t.trees.kind;
+      const treeR = { round: [17, 25], blossom: [18, 26], pine: [15, 22], cactus: [10, 15], palm: [14, 20], dead: [12, 18] }[kind] || [17, 25];
+      for (let i = 0; i < t.trees.count; i++) {
+        const r = random(treeR[0], treeR[1]);
+        const x = random(45, S - 45);
+        const y = random(45, S - 45);
+        if (Math.hypot(x - c, y - c) < 150) continue;
+        if (this.onRoad(x - r, y - r, r * 2, r * 2, 14)) continue;
         if ([...this.nearbyObjects(x, y, 32)].some((item) => item.type === "building")) continue;
-        this.add({ type: "tree", x, y, r: random(17, 25), shade: choose(["#324b37", "#3c5b3b", "#2e563d", "#516848"]) });
+        this.add({ type: "tree", kind, x, y, r, shade: choose(t.trees.shades) });
       }
 
-      for (let i = 0; i < 54; i++) {
-        const x = random(40, this.size - 40);
-        const y = random(40, this.size - 40);
-        if (Math.abs(x - this.size / 2) < 115 && Math.abs(y - this.size / 2) < 115) continue;
-        this.add({ type: "rock", x, y, r: random(12, 24), shade: choose(["#73746a", "#8b8879", "#676e69"]) });
+      for (let i = 0; i < t.rocks.count; i++) {
+        const x = random(40, S - 40);
+        const y = random(40, S - 40);
+        if (Math.hypot(x - c, y - c) < 125) continue;
+        this.add({ type: "rock", kind: t.rocks.kind || "rock", x, y, r: random(12, 24), shade: choose(t.rocks.shades) });
       }
 
-      for (let i = 0; i < 64; i++) {
+      for (let i = 0; i < t.walls.count; i++) {
         const horizontal = Math.random() > 0.5;
-        const x = random(100, this.size - 100);
-        const y = random(100, this.size - 100);
-        if (Math.abs(x - this.size / 2) < 200 || Math.abs(y - this.size / 2) < 190) continue;
-        this.add({ type: "wall", x, y, w: horizontal ? random(55, 125) : 15, h: horizontal ? 15 : random(55, 125), tint: choose(["#97927c", "#7e8473", "#a59b7e"]) });
+        const x = random(100, S - 100);
+        const y = random(100, S - 100);
+        const w = horizontal ? random(55, 125) : 15;
+        const h = horizontal ? 15 : random(55, 125);
+        if (Math.hypot(x - c, y - c) < 210) continue;
+        if (this.onRoad(x, y, w, h, 10)) continue;
+        this.add({ type: "wall", x, y, w, h, tint: choose(t.walls.tints) });
       }
     }
 
     draw(ctx, camera, width, height, quality) {
-      ctx.fillStyle = "#536d48";
-      ctx.fillRect(0, 0, this.size, this.size);
+      const t = this.theme;
+      const S = this.size;
+      const c = S / 2;
+      const now = performance.now();
+      ctx.fillStyle = t.ground;
+      ctx.fillRect(0, 0, S, S);
 
       ctx.save();
       ctx.strokeStyle = "rgba(35,45,36,.18)";
       ctx.lineWidth = 2;
       ctx.setLineDash([13, 18]);
-      ctx.strokeRect(0, 0, this.size, this.size);
+      ctx.strokeRect(0, 0, S, S);
       ctx.restore();
 
-      ctx.fillStyle = "#817958";
-      ctx.fillRect(this.size / 2 - 91, 0, 182, this.size);
-      ctx.fillRect(0, this.size / 2 - 83, this.size, 166);
-      ctx.fillStyle = "rgba(200,185,129,.18)";
-      ctx.fillRect(this.size / 2 - 95, 0, 6, this.size);
-      ctx.fillRect(this.size / 2 + 89, 0, 6, this.size);
-      ctx.fillRect(0, this.size / 2 - 87, this.size, 5);
-      ctx.fillRect(0, this.size / 2 + 82, this.size, 5);
-      ctx.save();
-      ctx.strokeStyle = "rgba(226,211,158,.33)";
-      ctx.lineWidth = 2;
-      ctx.setLineDash([22, 29]);
-      ctx.beginPath();
-      ctx.moveTo(this.size / 2, 0);
-      ctx.lineTo(this.size / 2, this.size);
-      ctx.moveTo(0, this.size / 2);
-      ctx.lineTo(this.size, this.size / 2);
-      ctx.stroke();
-      ctx.restore();
+      for (const r of this.roadRects) {
+        ctx.fillStyle = t.road;
+        ctx.fillRect(r.x, r.y, r.w, r.h);
+        ctx.fillStyle = t.roadEdge;
+        if (r.w < r.h) { ctx.fillRect(r.x - 4, r.y, 6, r.h); ctx.fillRect(r.x + r.w - 2, r.y, 6, r.h); }
+        else { ctx.fillRect(r.x, r.y - 4, r.w, 6); ctx.fillRect(r.x, r.y + r.h - 2, r.w, 6); }
+      }
+      for (const ring of this.roadRings) {
+        ctx.strokeStyle = t.road;
+        ctx.lineWidth = ring.w;
+        ctx.beginPath();
+        ctx.arc(c, c, ring.r, 0, TAU);
+        ctx.stroke();
+        ctx.strokeStyle = t.roadEdge;
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.arc(c, c, ring.r - ring.w / 2, 0, TAU);
+        ctx.arc(c, c, ring.r + ring.w / 2, 0, TAU);
+        ctx.stroke();
+      }
+      if (this.roadRects.length || this.roadRings.length) {
+        ctx.save();
+        ctx.strokeStyle = t.roadDash;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([22, 29]);
+        ctx.beginPath();
+        for (const r of this.roadRects) {
+          if (r.w < r.h) { ctx.moveTo(r.x + r.w / 2, 0); ctx.lineTo(r.x + r.w / 2, S); }
+          else { ctx.moveTo(0, r.y + r.h / 2); ctx.lineTo(S, r.y + r.h / 2); }
+        }
+        for (const ring of this.roadRings) { ctx.moveTo(c + ring.r, c); ctx.arc(c, c, ring.r, 0, TAU); }
+        ctx.stroke();
+        ctx.restore();
+      }
 
       const left = camera.x - width / 2 - 35;
       const right = camera.x + width / 2 + 35;
@@ -2073,6 +2806,8 @@ body.mobile-game .game-screen .reload-action { display: none; }
         ctx.fillRect(mark.x, mark.y, mark.size, mark.size * 0.55);
       }
 
+      if (t.decor) this.drawDecor(ctx, left, right, top, bottom, now, quality);
+
       for (const object of this.objects) {
         if (object.x < left - 80 || object.x > right + 80 || object.y < top - 80 || object.y > bottom + 80) continue;
         if (object.deco) {
@@ -2083,14 +2818,85 @@ body.mobile-game .game-screen .reload-action { display: none; }
         if (object.type === "building") this.drawBuilding(ctx, object, quality);
         else if (object.type === "tree") this.drawTree(ctx, object, quality);
         else if (object.type === "rock") this.drawRock(ctx, object);
-        else if (object.type === "wall") this.drawWall(ctx, object);
+        else if (object.type === "wall") this.drawWall(ctx, object, quality);
+      }
+
+      if (t.ambient) {
+        ctx.fillStyle = `rgba(${t.ambient.rgb},${t.ambient.alpha})`;
+        ctx.fillRect(left, top, right - left, bottom - top);
+      }
+    }
+
+    drawDecor(ctx, left, right, top, bottom, now, quality) {
+      const d = this.theme.decor;
+      const time = now / 1000;
+      if (d.style === "fireflies") {
+        if (quality === "LOW") return;
+        for (const p of this.decor) {
+          if (p.x < left || p.x > right || p.y < top || p.y > bottom) continue;
+          const a = 0.25 + 0.75 * (0.5 + 0.5 * Math.sin(time * 2 + p.phase));
+          const x = p.x + Math.sin(time * 0.7 + p.phase) * 14;
+          const y = p.y + Math.cos(time * 0.9 + p.phase) * 10;
+          ctx.fillStyle = `rgba(230,255,122,${0.18 * a})`;
+          ctx.beginPath();
+          ctx.arc(x, y, 9, 0, TAU);
+          ctx.fill();
+          ctx.fillStyle = `rgba(245,255,170,${a})`;
+          ctx.beginPath();
+          ctx.arc(x, y, 2.2, 0, TAU);
+          ctx.fill();
+        }
+        return;
+      }
+      for (const p of this.decor) {
+        if (p.x + p.rx < left || p.x - p.rx > right || p.y + p.rx < top || p.y - p.rx > bottom) continue;
+        if (d.style === "glow") {
+          const pulse = 0.78 + 0.22 * Math.sin(time * 1.6 + p.phase);
+          ctx.globalAlpha = 0.22 * pulse;
+          ctx.fillStyle = d.colors[1];
+          ctx.beginPath();
+          ctx.ellipse(p.x, p.y, p.rx * 1.7, p.ry * 1.7, p.rot, 0, TAU);
+          ctx.fill();
+          ctx.globalAlpha = 0.95;
+          ctx.fillStyle = d.colors[0];
+          ctx.beginPath();
+          ctx.ellipse(p.x, p.y, p.rx, p.ry, p.rot, 0, TAU);
+          ctx.fill();
+          ctx.globalAlpha = 0.55 * pulse;
+          ctx.fillStyle = d.colors[1];
+          ctx.beginPath();
+          ctx.ellipse(p.x - p.rx * 0.12, p.y - p.ry * 0.1, p.rx * 0.5, p.ry * 0.45, p.rot, 0, TAU);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        } else if (d.style === "water") {
+          ctx.fillStyle = d.colors[0];
+          ctx.beginPath();
+          ctx.ellipse(p.x, p.y, p.rx, p.ry, p.rot, 0, TAU);
+          ctx.fill();
+          ctx.strokeStyle = d.colors[1];
+          ctx.lineWidth = 2;
+          ctx.globalAlpha = 0.5 + 0.3 * Math.sin(time * 1.3 + p.phase);
+          ctx.beginPath();
+          ctx.ellipse(p.x, p.y, p.rx * 0.7, p.ry * 0.7, p.rot, 0, TAU);
+          ctx.stroke();
+          ctx.globalAlpha = 1;
+        } else {
+          ctx.fillStyle = d.colors[1];
+          ctx.beginPath();
+          ctx.ellipse(p.x + 6, p.y + 5, p.rx, p.ry, p.rot, 0, TAU);
+          ctx.fill();
+          ctx.fillStyle = d.colors[0];
+          ctx.beginPath();
+          ctx.ellipse(p.x, p.y, p.rx * 0.92, p.ry * 0.92, p.rot, 0, TAU);
+          ctx.fill();
+        }
       }
     }
 
     drawBuilding(ctx, object, quality) {
       ctx.fillStyle = "rgba(19,29,24,.32)";
       ctx.fillRect(object.x + 8, object.y + 10, object.w, object.h);
-      ctx.fillStyle = "#4c493b";
+      ctx.fillStyle = this.theme.bEdge;
       ctx.fillRect(object.x - 5, object.y - 5, object.w + 10, object.h + 10);
       ctx.fillStyle = object.tint;
       ctx.fillRect(object.x, object.y, object.w, object.h);
@@ -2108,28 +2914,121 @@ body.mobile-game .game-screen .reload-action { display: none; }
         ctx.lineWidth = 1;
         ctx.strokeRect(object.x + 10, object.y + 10, object.w - 20, object.h - 20);
       }
+      if (object.snow) {
+        ctx.fillStyle = "rgba(255,255,255,.55)";
+        ctx.fillRect(object.x + 4, object.y + 4, object.w - 8, (object.h - 8) * 0.55);
+      }
+      if (object.neon) {
+        ctx.strokeStyle = object.neon;
+        ctx.lineWidth = 2.5;
+        if (quality !== "LOW") { ctx.shadowColor = object.neon; ctx.shadowBlur = 14; }
+        ctx.strokeRect(object.x + 1, object.y + 1, object.w - 2, object.h - 2);
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = object.neon;
+        ctx.globalAlpha = 0.5;
+        for (let x = object.x + 18; x < object.x + object.w - 14; x += 37) ctx.fillRect(x, object.y + 22, 17, 4);
+        ctx.globalAlpha = 1;
+      }
     }
 
     drawTree(ctx, object, quality) {
+      const kind = object.kind || "round";
+      const r = object.r;
       ctx.fillStyle = "rgba(16,28,20,.26)";
       ctx.beginPath();
-      ctx.ellipse(object.x + 6, object.y + 9, object.r * 1.03, object.r * 0.76, 0.2, 0, TAU);
+      ctx.ellipse(object.x + 6, object.y + 9, r * 1.03, r * 0.76, 0.2, 0, TAU);
       ctx.fill();
-      ctx.fillStyle = "#695c3c";
-      ctx.fillRect(object.x - 3, object.y - 3, 7, 12);
-      ctx.fillStyle = object.shade;
-      ctx.beginPath();
-      ctx.arc(object.x, object.y - 3, object.r, 0, TAU);
-      ctx.fill();
-      ctx.fillStyle = "rgba(149,170,97,.2)";
-      ctx.beginPath();
-      ctx.arc(object.x - object.r * 0.31, object.y - object.r * 0.35, object.r * 0.39, 0, TAU);
-      ctx.fill();
-      if (quality === "HIGH") {
-        ctx.fillStyle = "rgba(191,181,105,.22)";
+      if (kind === "pine") {
+        ctx.fillStyle = "#4a3a28";
+        ctx.fillRect(object.x - 2.5, object.y + 2, 5, 9);
+        for (let i = 0; i < 3; i++) {
+          const w = r * (1.05 - i * 0.24);
+          const y = object.y + 4 - i * r * 0.5;
+          ctx.fillStyle = object.shade;
+          ctx.beginPath();
+          ctx.moveTo(object.x - w, y);
+          ctx.lineTo(object.x + w, y);
+          ctx.lineTo(object.x, y - r * 0.85);
+          ctx.closePath();
+          ctx.fill();
+          ctx.fillStyle = "rgba(255,255,255,.55)";
+          ctx.beginPath();
+          ctx.moveTo(object.x - w * 0.55, y - r * 0.38);
+          ctx.lineTo(object.x + w * 0.55, y - r * 0.38);
+          ctx.lineTo(object.x, y - r * 0.85);
+          ctx.closePath();
+          ctx.fill();
+        }
+      } else if (kind === "cactus") {
+        ctx.fillStyle = object.shade;
         ctx.beginPath();
-        ctx.arc(object.x + object.r * 0.35, object.y + 1, object.r * 0.22, 0, TAU);
+        roundedRect(ctx, object.x - r * 0.32, object.y - r * 1.05, r * 0.64, r * 1.6, r * 0.3);
         ctx.fill();
+        ctx.beginPath();
+        roundedRect(ctx, object.x - r * 0.95, object.y - r * 0.5, r * 0.35, r * 0.75, r * 0.17);
+        roundedRect(ctx, object.x + r * 0.6, object.y - r * 0.8, r * 0.35, r * 0.8, r * 0.17);
+        ctx.fill();
+        ctx.fillRect(object.x - r * 0.95, object.y - r * 0.05, r * 0.7, r * 0.25);
+        ctx.fillRect(object.x + r * 0.3, object.y - r * 0.2, r * 0.7, r * 0.25);
+        ctx.fillStyle = "rgba(255,255,255,.18)";
+        ctx.fillRect(object.x - r * 0.12, object.y - r * 0.95, r * 0.1, r * 1.4);
+      } else if (kind === "palm") {
+        ctx.strokeStyle = "#7a5a34";
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(object.x, object.y + 8);
+        ctx.quadraticCurveTo(object.x + r * 0.4, object.y - r * 0.4, object.x, object.y - r * 0.9);
+        ctx.stroke();
+        for (let i = 0; i < 7; i++) {
+          const a = i * TAU / 7 + 0.3;
+          ctx.fillStyle = object.shade;
+          ctx.beginPath();
+          ctx.ellipse(object.x + Math.cos(a) * r * 0.62, object.y - r * 0.9 + Math.sin(a) * r * 0.62, r * 0.7, r * 0.2, a, 0, TAU);
+          ctx.fill();
+        }
+        ctx.fillStyle = "#5a3d24";
+        ctx.beginPath();
+        ctx.arc(object.x, object.y - r * 0.9, 3, 0, TAU);
+        ctx.fill();
+      } else if (kind === "dead") {
+        ctx.strokeStyle = object.shade;
+        ctx.lineCap = "round";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(object.x, object.y + 8);
+        ctx.lineTo(object.x, object.y - r * 0.6);
+        ctx.stroke();
+        ctx.lineWidth = 2.6;
+        ctx.beginPath();
+        ctx.moveTo(object.x, object.y - r * 0.2); ctx.lineTo(object.x - r * 0.8, object.y - r * 0.85);
+        ctx.moveTo(object.x, object.y - r * 0.45); ctx.lineTo(object.x + r * 0.85, object.y - r * 0.95);
+        ctx.moveTo(object.x, object.y - r * 0.6); ctx.lineTo(object.x - r * 0.25, object.y - r * 1.25);
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = "#695c3c";
+        ctx.fillRect(object.x - 3, object.y - 3, 7, 12);
+        ctx.fillStyle = object.shade;
+        ctx.beginPath();
+        ctx.arc(object.x, object.y - 3, r, 0, TAU);
+        ctx.fill();
+        ctx.fillStyle = "rgba(149,170,97,.2)";
+        ctx.beginPath();
+        ctx.arc(object.x - r * 0.31, object.y - r * 0.35, r * 0.39, 0, TAU);
+        ctx.fill();
+        if (kind === "blossom") {
+          ctx.fillStyle = "rgba(255,255,255,.5)";
+          for (let i = 0; i < 5; i++) {
+            const a = i * 1.26 + object.x;
+            ctx.beginPath();
+            ctx.arc(object.x + Math.cos(a) * r * 0.55, object.y - 3 + Math.sin(a) * r * 0.55, r * 0.17, 0, TAU);
+            ctx.fill();
+          }
+        } else if (quality === "HIGH") {
+          ctx.fillStyle = "rgba(191,181,105,.22)";
+          ctx.beginPath();
+          ctx.arc(object.x + r * 0.35, object.y + 1, r * 0.22, 0, TAU);
+          ctx.fill();
+        }
       }
     }
 
@@ -2142,13 +3041,19 @@ body.mobile-game .game-screen .reload-action { display: none; }
       ctx.beginPath();
       ctx.ellipse(object.x, object.y, object.r, object.r * 0.78, -0.15, 0, TAU);
       ctx.fill();
+      if (object.kind === "lava") {
+        ctx.strokeStyle = "rgba(255,120,40,.4)";
+        ctx.lineWidth = 1.6;
+        ctx.stroke();
+      }
       ctx.fillStyle = "rgba(231,229,205,.2)";
       ctx.beginPath();
       ctx.ellipse(object.x - object.r * 0.28, object.y - object.r * 0.25, object.r * 0.4, object.r * 0.21, -0.3, 0, TAU);
       ctx.fill();
     }
 
-    drawWall(ctx, object) {
+    drawWall(ctx, object, quality) {
+      const walls = this.theme.walls;
       ctx.fillStyle = "rgba(20,27,23,.27)";
       ctx.fillRect(object.x + 4, object.y + 5, object.w, object.h);
       ctx.fillStyle = object.tint;
@@ -2156,6 +3061,16 @@ body.mobile-game .game-screen .reload-action { display: none; }
       ctx.fillStyle = "rgba(227,214,170,.28)";
       if (object.w > object.h) ctx.fillRect(object.x + 5, object.y + 2, object.w - 10, 3);
       else ctx.fillRect(object.x + 2, object.y + 5, 3, object.h - 10);
+      if (walls.stripes) {
+        ctx.fillStyle = "rgba(0,0,0,.22)";
+        if (object.w > object.h) for (let x = object.x + 8; x < object.x + object.w - 4; x += 11) ctx.fillRect(x, object.y, 3, object.h);
+        else for (let y = object.y + 8; y < object.y + object.h - 4; y += 11) ctx.fillRect(object.x, y, object.w, 3);
+      }
+      if (walls.neonWalls && quality !== "LOW") {
+        ctx.fillStyle = object.w > object.h ? "rgba(0,229,255,.7)" : "rgba(255,43,214,.7)";
+        if (object.w > object.h) ctx.fillRect(object.x + 4, object.y + object.h - 3, object.w - 8, 2);
+        else ctx.fillRect(object.x + object.w - 3, object.y + 4, 2, object.h - 8);
+      }
     }
   }
 
@@ -2376,8 +3291,8 @@ body.mobile-game .game-screen .reload-action { display: none; }
       this.range = weapon.spec.range;
       this.damage = weapon.spec.damage * random(playerShot ? 0.88 : 0.74, playerShot ? 1.16 : 1.11);
       this.owner = owner;
-      this.tracer = playerShot ? Cosmetics.equipped("tracer") : null;
-      this.color = playerShot ? this.tracer.color : "#ff8e60";
+      this.tracer = playerShot ? Cosmetics.equipped("tracer") : (owner.cosmetics && owner.cosmetics.tracer.id !== "tr_default" ? owner.cosmetics.tracer : null);
+      this.color = this.tracer ? this.tracer.color : "#ff8e60";
       this.blast = weapon.spec.blast || 0;
       this.radius = this.blast ? 4.5 : weapon.name === "AWM" ? 3.4 : weapon.name === "Sniper Rifle" ? 3 : 2.3;
       this.alive = true;
@@ -2670,6 +3585,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       this.id = index;
       this.name = choose(["NOMAD", "RAVEN", "MICA", "DRIFT", "KILO", "ONYX", "WOLF", "EMBER", "GHOST", "SABLE", "HAWK", "ROOK", "VEX", "ORBIT", "JUNO", "ECHO", "MOSS", "CIPHER", "ASH", "NORTH", "KESTREL", "FLINT"].slice(index % 22));
       this.color = choose(["#e88768", "#d4a467", "#db766a", "#c89468", "#d2bc81", "#d68164"]);
+      this.cosmetics = Cosmetics.randomLoadout();
       this.hp = random(74, 100);
       this.maxHp = 100;
       this.armor = random(0, 44);
@@ -2901,6 +3817,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       this.lastHud = 0;
       Cosmetics.save = save;
       Locker.init(save);
+      MapSelect.init(save);
       this.bindMenu();
       this.bindSettings();
       this.bindLayoutEditor();
@@ -2910,7 +3827,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
     }
 
     static setScreen(screen) {
-      const names = ["menu", "game", "settings", "layout", "help", "pause", "results", "locker"];
+      const names = ["menu", "game", "settings", "layout", "help", "pause", "results", "locker", "maps"];
       for (const name of names) {
         const node = $(`#screen-${name}`);
         if (node) {
@@ -3075,6 +3992,49 @@ body.mobile-game .game-screen .reload-action { display: none; }
         this.layoutDraft[this.selectedLayoutItem].size = Number(sizeInput.value) / 100;
         this.renderLayoutPreview();
       });
+      const opacityInput = $("#layout-opacity");
+      opacityInput?.addEventListener("input", () => {
+        if (!this.layoutDraft || !this.selectedLayoutItem) return;
+        this.layoutDraft[this.selectedLayoutItem].opacity = Number(opacityInput.value) / 100;
+        this.renderLayoutPreview();
+      });
+      $("#layout-opacity-all")?.addEventListener("click", () => {
+        if (!this.layoutDraft) return;
+        const value = Number(opacityInput.value) / 100;
+        for (const id of Object.keys(this.layoutDraft)) this.layoutDraft[id].opacity = value;
+        this.audio.play("button");
+        this.renderLayoutPreview();
+      });
+      const toolbar = $("#layout-toolbar");
+      const handle = $("#layout-toolbar-handle");
+      $("#layout-collapse")?.addEventListener("click", () => {
+        const collapsed = toolbar.classList.toggle("is-collapsed");
+        $("#layout-collapse").textContent = collapsed ? "+" : "–";
+      });
+      let toolbarDrag = null;
+      handle?.addEventListener("pointerdown", (event) => {
+        if (event.target.closest("button")) return;
+        const rect = toolbar.getBoundingClientRect();
+        toolbarDrag = { id: event.pointerId, dx: event.clientX - rect.left, dy: event.clientY - rect.top };
+        handle.setPointerCapture(event.pointerId);
+        toolbar.classList.add("is-dragging");
+        event.preventDefault();
+      });
+      handle?.addEventListener("pointermove", (event) => {
+        if (!toolbarDrag || event.pointerId !== toolbarDrag.id) return;
+        const left = clamp(event.clientX - toolbarDrag.dx, 4, Math.max(4, window.innerWidth - toolbar.offsetWidth - 4));
+        const top = clamp(event.clientY - toolbarDrag.dy, 4, Math.max(4, window.innerHeight - toolbar.offsetHeight - 4));
+        toolbar.style.left = `${left}px`;
+        toolbar.style.top = `${top}px`;
+      });
+      const endToolbarDrag = (event) => {
+        if (toolbarDrag && event.pointerId === toolbarDrag.id) {
+          toolbarDrag = null;
+          toolbar.classList.remove("is-dragging");
+        }
+      };
+      handle?.addEventListener("pointerup", endToolbarDrag);
+      handle?.addEventListener("pointercancel", endToolbarDrag);
       $("#layout-reset")?.addEventListener("click", () => {
         this.layoutDraft = this.normalizeControlLayout(DEFAULT_CONTROL_LAYOUT);
         this.selectLayoutItem("fire");
@@ -3102,10 +4062,12 @@ body.mobile-game .game-screen .reload-action { display: none; }
         const x = Number(value.x);
         const y = Number(value.y);
         const size = Number(value.size);
+        const opacity = Number(value.opacity);
         normalized[id] = {
           x: clamp(Number.isFinite(x) ? x : fallback.x, .035, .965),
           y: clamp(Number.isFinite(y) ? y : fallback.y, .06, .94),
           size: clamp(Number.isFinite(size) ? size : fallback.size, .7, 1.5),
+          opacity: clamp(Number.isFinite(opacity) ? opacity : (fallback.opacity ?? 1), .2, 1),
         };
       }
       return normalized;
@@ -3137,6 +4099,11 @@ body.mobile-game .game-screen .reload-action { display: none; }
       if (selected) selected.textContent = name;
       if (sizeInput) sizeInput.value = String(Math.round(this.layoutDraft[id].size * 100));
       if (output) output.textContent = `${Math.round(this.layoutDraft[id].size * 100)}%`;
+      const opacityInput = $("#layout-opacity");
+      const opacityOutput = $("#layout-opacity-output");
+      const opacityValue = Math.round((this.layoutDraft[id].opacity ?? 1) * 100);
+      if (opacityInput) opacityInput.value = String(opacityValue);
+      if (opacityOutput) opacityOutput.textContent = `${opacityValue}%`;
       document.querySelectorAll("#layout-stage [data-layout-id]").forEach((item) => {
         const active = item.dataset.layoutId === id;
         item.classList.toggle("is-selected", active);
@@ -3152,6 +4119,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
         node.style.left = `${value.x * 100}%`;
         node.style.top = `${value.y * 100}%`;
         node.style.setProperty("--preview-scale", String(this.layoutPreviewScale(node.dataset.layoutId, value.size)));
+        node.style.setProperty("--preview-opacity", String(Math.max(0.3, value.opacity ?? 1)));
       });
       this.selectLayoutItem(this.selectedLayoutItem || "fire");
     }
@@ -3165,6 +4133,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
           node.style.removeProperty("--layout-x");
           node.style.removeProperty("--layout-y");
           node.style.removeProperty("--layout-scale");
+          node.style.removeProperty("--layout-opacity");
         });
         return;
       }
@@ -3180,6 +4149,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
         node.style.setProperty("--layout-x", `${value.x * 100}%`);
         node.style.setProperty("--layout-y", `${value.y * 100}%`);
         node.style.setProperty("--layout-scale", String(size));
+        node.style.setProperty("--layout-opacity", String(value.opacity ?? 1));
       });
     }
 
@@ -3238,6 +4208,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
 
     static refreshProfile() {
       Locker.syncProfile();
+      MapSelect.syncChip();
       const data = this.save.data;
       const level = $("#profile-level");
       const xp = $("#profile-xp");
@@ -3548,6 +4519,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       this.blasts = [];
       this.fx = [];
       this.shake = 0;
+      this.map = new MapSystem(MAP_SIZE, Maps.current().theme);
       this.streak = { count: 0, last: 0 };
       this.runBonus = 0;
       $("#kill-feed") && ($("#kill-feed").innerHTML = "");
@@ -3584,7 +4556,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       UI.setScreen("game");
       this.requestLandscape();
       this.resize();
-      UI.toast(mode === "training" ? "TRAINING DEPLOYED" : "DROP ZONE · 22 OPERATORS", 2.5, "weapon");
+      UI.toast(mode === "training" ? `TRAINING · ${Maps.current().name.toUpperCase()}` : `${Maps.current().name.toUpperCase()} · 22 OPERATORS`, 2.5, "weapon");
       UI.updateHud(this, performance.now());
     }
 
@@ -3699,7 +4671,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       for (const actor of this.actors) {
         if (!actor.alive || Math.abs(actor.x - this.camera.x) > this.width / 2 + 42 || Math.abs(actor.y - this.camera.y) > this.height / 2 + 42) continue;
         const player = actor.isPlayer;
-        const skin = player ? Cosmetics.equipped("skin") : null;
+        const skin = player ? Cosmetics.equipped("skin") : (actor.cosmetics ? actor.cosmetics.skin : null);
         ctx.save();
         ctx.translate(actor.x, actor.y);
         ctx.fillStyle = "rgba(13,24,20,.38)";
@@ -3715,6 +4687,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
         }
 
         if (player) CosmeticFX.drawAura(ctx, Cosmetics.equipped("aura"), actor.r, now, skin);
+        else if (actor.cosmetics && this.quality !== "LOW") CosmeticFX.drawAura(ctx, actor.cosmetics.aura, actor.r, now, skin);
         ctx.rotate(actor.angle);
         if (actor.muzzle > 0) ctx.translate(-2.2, 0);
         WeaponArt.draw(ctx, actor.weapon.name, actor.muzzle > 0);
@@ -3724,19 +4697,26 @@ body.mobile-game .game-screen .reload-action { display: none; }
         ctx.beginPath();
         ctx.arc(0, 0, actor.r, 0, TAU);
         ctx.fill();
-        ctx.strokeStyle = player ? skin.ring : "rgba(49,35,25,.74)";
-        ctx.lineWidth = player ? 2.4 : 1.5;
+        ctx.strokeStyle = skin ? skin.ring : "rgba(49,35,25,.74)";
+        ctx.lineWidth = skin ? 2.4 : 1.5;
         ctx.stroke();
-        if (player) CosmeticFX.pattern(ctx, skin, actor.r, now);
-        ctx.fillStyle = player ? skin.inner : "#775844";
+        if (skin) CosmeticFX.pattern(ctx, skin, actor.r, now);
+        ctx.fillStyle = skin ? skin.inner : "#775844";
         ctx.beginPath();
         ctx.arc(-2, -3, actor.r * 0.58, 0, TAU);
         ctx.fill();
-        ctx.fillStyle = player ? skin.head : "#eee3c4";
+        ctx.fillStyle = skin ? skin.head : "#eee3c4";
         ctx.beginPath();
         ctx.arc(0, -actor.r * 0.73, actor.r * 0.31, 0, TAU);
         ctx.fill();
-        if (player) CosmeticFX.overlay(ctx, skin, actor.r, now);
+        if (skin) CosmeticFX.overlay(ctx, skin, actor.r, now);
+        if (!player) {
+          ctx.strokeStyle = "rgba(255,95,75,.72)";
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.arc(0, 0, actor.r + 3.6, 0, TAU);
+          ctx.stroke();
+        }
         if (actor.armor > 5) {
           ctx.strokeStyle = "rgba(106,196,201,.75)";
           ctx.lineWidth = 2;
@@ -3756,6 +4736,11 @@ body.mobile-game .game-screen .reload-action { display: none; }
             ctx.font = "700 9px system-ui";
             ctx.textAlign = "center";
             ctx.fillText(actor.name.slice(0, 13), 0, -actor.r - 18);
+          } else if (actor.cosmetics) {
+            ctx.fillStyle = RARITY[actor.cosmetics.skin.rarity].color;
+            ctx.font = "700 8px system-ui";
+            ctx.textAlign = "center";
+            ctx.fillText(actor.name.slice(0, 13), 0, -actor.r - 17);
           }
         }
         ctx.restore();
@@ -3815,6 +4800,9 @@ body.mobile-game .game-screen .reload-action { display: none; }
         }
       }
       this.shake = Math.max(0, (this.shake || 0) - dt * 26);
+      this.save.data.playTime = (this.save.data.playTime || 0) + dt;
+      this.ptSave = (this.ptSave || 0) + dt;
+      if (this.ptSave > 15) { this.ptSave = 0; this.save.save(); }
       if (this.fx) for (let i = this.fx.length - 1; i >= 0; i--) { this.fx[i].t += dt; if (this.fx[i].t > this.fx[i].max) this.fx.splice(i, 1); }
       if (this.blasts) for (let i = this.blasts.length - 1; i >= 0; i--) { this.blasts[i].life -= dt; if (this.blasts[i].life <= 0) this.blasts.splice(i, 1); }
     }
@@ -3896,12 +4884,18 @@ body.mobile-game .game-screen .reload-action { display: none; }
         canvas.height = size * dpr;
       }
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.fillStyle = "#3f5941";
-      ctx.fillRect(0, 0, size, size);
-      ctx.fillStyle = "#897d58";
-      ctx.fillRect(size / 2 - 4, 0, 8, size);
-      ctx.fillRect(0, size / 2 - 4, size, 8);
       const scale = size / this.map.size;
+      ctx.fillStyle = this.map.theme.mini;
+      ctx.fillRect(0, 0, size, size);
+      ctx.fillStyle = this.map.theme.miniRoad;
+      for (const r of this.map.roadRects) ctx.fillRect(r.x * scale, r.y * scale, Math.max(2, r.w * scale), Math.max(2, r.h * scale));
+      for (const ring of this.map.roadRings) {
+        ctx.strokeStyle = this.map.theme.miniRoad;
+        ctx.lineWidth = Math.max(2, ring.w * scale);
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, ring.r * scale, 0, TAU);
+        ctx.stroke();
+      }
       ctx.save();
       ctx.beginPath();
       ctx.arc(this.zone.cx * scale, this.zone.cy * scale, this.zone.radius * scale, 0, TAU);
@@ -4032,6 +5026,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       this.addDeathLoot(target);
       UI.feed(attacker ? (attacker.isPlayer ? "YOU" : attacker.name) : "THE ZONE", target.isPlayer ? "YOU" : target.name, !!attacker?.isPlayer, target.isPlayer);
       this.addShake(target.isPlayer ? 8 : 3.5);
+      if (attacker && !attacker.isPlayer && attacker.cosmetics && Math.hypot(target.x - this.player.x, target.y - this.player.y) < 650) CosmeticFX.spawnKill(this, target.x, target.y, attacker.cosmetics.killfx);
       const livingAfter = this.actors.reduce((count, actor) => count + (actor.alive ? 1 : 0), 0);
       if (attacker?.isPlayer && target !== this.player) {
         this.player.kills += 1;
