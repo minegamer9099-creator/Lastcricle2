@@ -681,6 +681,141 @@ body.mobile-game .game-screen .reload-action { display: none; }
   .menu-screen.lobby::after { content: "↻  ROTATE TO LANDSCAPE"; position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; background: rgba(6,10,8,.94); color: #c6db78; font: 800 15px var(--font-ui); letter-spacing: .22em; text-align: center; padding: 20px; }
 }
 
+/* =====================  SETTINGS + PAUSE REDESIGN  ===================== */
+:root { --lb-rgb: 121,216,189; }
+.fx-gradient { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 30%, rgba(var(--lb-rgb), .2), transparent 60%), radial-gradient(ellipse at 8% 0%, rgba(255,209,102,.12), transparent 46%), radial-gradient(ellipse at 100% 100%, rgba(120,90,255,.13), transparent 52%), linear-gradient(180deg, #111b16, #070b09); }
+.fx-floor { position: absolute; left: -25%; right: -25%; bottom: -8%; height: 55%; transform: perspective(380px) rotateX(66deg); transform-origin: 50% 100%; background-image: linear-gradient(rgba(var(--lb-rgb), .22) 1px, transparent 1px), linear-gradient(90deg, rgba(var(--lb-rgb), .22) 1px, transparent 1px); background-size: 48px 48px; -webkit-mask-image: linear-gradient(to top, #000 6%, transparent 85%); mask-image: linear-gradient(to top, #000 6%, transparent 85%); animation: lb-floor 5s linear infinite; }
+.fx-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(2,5,3,.65) 100%); }
+
+/* ---------- settings ---------- */
+.st-screen { display: block; padding: 0; background: #090e0b; backdrop-filter: none; overflow: hidden; }
+.st-bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.st-top { position: absolute; z-index: 2; top: max(8px, env(safe-area-inset-top)); left: max(20px, env(safe-area-inset-left)); right: max(20px, env(safe-area-inset-right)); height: 38px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; animation: lb-in .5s ease-out both; --fx: 0; --fy: -18px; }
+.st-back { justify-self: start; height: 34px; padding: 0 16px 0 12px; border-radius: 999px; border: 1px solid rgba(var(--lb-rgb), .6); background: linear-gradient(180deg, rgba(var(--lb-rgb), .22), rgba(var(--lb-rgb), .06)); color: #fff; font: 800 10px var(--font-ui); letter-spacing: .13em; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(0,0,0,.35); transition: transform .12s; }
+.st-back span { font-size: 18px; line-height: 1; margin-top: -2px; }
+.st-back:active { transform: scale(.94); }
+.st-title { display: grid; gap: 1px; text-align: center; }
+.st-title b { font: 900 21px var(--font-ui); letter-spacing: .2em; color: #fff; text-shadow: 0 0 18px rgba(var(--lb-rgb), .5); }
+.st-title small { font: 700 7.5px var(--font-ui); letter-spacing: .2em; color: #8fa18f; }
+.st-version { justify-self: end; font: 700 9px var(--font-data); letter-spacing: .12em; color: #6f806f; }
+.st-body { position: absolute; z-index: 2; left: max(20px, env(safe-area-inset-left)); right: max(20px, env(safe-area-inset-right)); top: calc(max(8px, env(safe-area-inset-top)) + 48px); bottom: max(12px, env(safe-area-inset-bottom)); display: grid; grid-template-columns: 124px 1fr; gap: 12px; margin: 0; padding: 0; min-height: 0; }
+.st-tabs { display: grid; gap: 7px; align-content: start; animation: lb-in .55s .08s ease-out both; --fx: -24px; --fy: 0; }
+.st-tab { position: relative; display: flex; align-items: center; gap: 9px; height: 42px; padding: 0 12px; border: 0; color: #aab9a6; font: 800 10px var(--font-ui); letter-spacing: .13em; text-align: left; cursor: pointer; background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); box-shadow: inset 0 0 0 1.2px rgba(255,255,255,.14); clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); transition: transform .12s, background .15s, color .15s; }
+.st-tab svg { width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.st-tab.is-active { color: #0e170b; background: linear-gradient(180deg, #ffe88a, #f2a73a); box-shadow: none; }
+.st-tab:active { transform: scale(.95); }
+.st-panes { position: relative; min-height: 0; overflow-y: auto; padding: 2px 4px 6px 2px; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+.st-panes::-webkit-scrollbar { width: 3px; }
+.st-panes::-webkit-scrollbar-thumb { background: rgba(var(--lb-rgb), .5); border-radius: 3px; }
+.st-pane { display: none; margin: 0; padding: 0; border: 0; min-width: 0; gap: 8px; align-content: start; }
+.st-pane.is-active { display: grid; animation: st-pane .35s ease-out both; }
+@keyframes st-pane { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+.st-pane > legend { float: none; display: block; width: 100%; padding: 0 0 6px; font: 800 9px var(--font-ui); letter-spacing: .22em; color: rgb(var(--lb-rgb)); }
+.st-screen .setting-row { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 11px; margin: 0; padding: 9px 12px; border: 1px solid rgba(255,255,255,.16); border-radius: 14px; background: linear-gradient(160deg, rgba(255,255,255,.1), rgba(255,255,255,.03)); backdrop-filter: blur(8px); box-shadow: 0 6px 18px rgba(0,0,0,.28); cursor: pointer; transition: border-color .15s, transform .12s; }
+.st-screen .setting-row:active { transform: scale(.985); }
+.st-screen .setting-row b { display: block; font: 800 12px var(--font-ui); letter-spacing: .06em; color: #fff; }
+.st-screen .setting-row small { display: block; margin-top: 2px; font: 600 8.5px var(--font-ui); letter-spacing: .04em; color: #92a590; }
+.st-ico { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: rgba(var(--lb-rgb), .16); border: 1px solid rgba(var(--lb-rgb), .4); color: rgb(var(--lb-rgb)); font-style: normal; }
+.st-ico svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.st-screen .setting-row input[type="checkbox"] { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; }
+.st-screen .toggle-ui { position: relative; width: 46px; height: 25px; border-radius: 99px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.24); transition: background .2s, box-shadow .2s; }
+.st-screen .toggle-ui::before, .st-screen .toggle-ui::after { content: none; }
+.st-screen .toggle-ui { display: block; }
+.st-screen .toggle-ui::after { content: ""; position: absolute; top: 2px; left: 2px; width: 19px; height: 19px; border-radius: 50%; background: #dfe6da; box-shadow: 0 2px 5px rgba(0,0,0,.4); transition: transform .2s cubic-bezier(.3,1.4,.5,1), background .2s; }
+.st-screen input:checked + .toggle-ui { background: linear-gradient(180deg, #b9d96a, #7fb83a); border-color: #d6f08c; box-shadow: 0 0 14px rgba(160,220,80,.45); }
+.st-screen input:checked + .toggle-ui::after { transform: translateX(21px); background: #fff; }
+.st-screen .range-row { grid-template-columns: auto minmax(120px, .8fr) 1.4fr auto; grid-template-areas: "ico txt rng out"; row-gap: 6px; }
+.st-screen .range-row .st-ico { grid-area: ico; }
+.st-screen .range-row > span:not(.st-ico):not(.toggle-ui) { grid-area: txt; }
+.st-screen .range-row output { grid-area: out; min-width: 42px; padding: 3px 8px; border-radius: 8px; background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.18); text-align: center; font: 800 10px var(--font-data); color: #ffd166; }
+.st-screen .range-row input[type="range"] { grid-area: rng; width: 100%; height: 22px; margin: 0; -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; }
+.st-screen input[type="range"]::-webkit-slider-runnable-track { height: 8px; border-radius: 5px; background: linear-gradient(90deg, #9fd04a var(--pct, 50%), rgba(255,255,255,.16) var(--pct, 50%)); }
+.st-screen input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -7px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #d9e8b0); border: 3px solid #8fc24a; box-shadow: 0 2px 8px rgba(0,0,0,.5), 0 0 12px rgba(160,220,80,.5); }
+.st-screen input[type="range"]::-moz-range-track { height: 8px; border-radius: 5px; background: rgba(255,255,255,.16); }
+.st-screen input[type="range"]::-moz-range-progress { height: 8px; border-radius: 5px; background: #9fd04a; }
+.st-screen input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 3px solid #8fc24a; }
+.st-quality { grid-template-columns: auto 1fr; grid-template-areas: "ico txt" "seg seg"; row-gap: 9px; }
+.st-quality > select { display: none; }
+.st-quality .st-ico { grid-area: ico; }
+.st-quality > span:not(.st-ico) { grid-area: txt; }
+.st-seg { grid-area: seg; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.st-seg button { height: 34px; border: 0; color: #aab9a6; font: 800 9.5px var(--font-ui); letter-spacing: .1em; cursor: pointer; background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.03)); box-shadow: inset 0 0 0 1.2px rgba(255,255,255,.16); clip-path: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%); transition: transform .12s; }
+.st-seg button.is-active { color: #0e170b; background: linear-gradient(180deg, #ffe88a, #f2a73a); box-shadow: none; }
+.st-seg button:active { transform: scale(.94); }
+.st-note { margin: 2px 2px 0; font: 600 9px/1.5 var(--font-ui); letter-spacing: .04em; color: #889a87; }
+.st-layout-btn { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 48px; margin: 0; padding: 0 16px; border-radius: 14px; border: 1px solid rgba(255,209,102,.6); background: linear-gradient(90deg, rgba(255,209,102,.22), rgba(255,160,60,.06)); color: #ffd166; text-align: left; cursor: pointer; font-family: inherit; }
+.st-layout-btn b { display: block; font: 900 11px var(--font-ui); letter-spacing: .14em; }
+.st-layout-btn small { display: block; margin-top: 2px; font: 700 7.5px var(--font-ui); letter-spacing: .1em; color: #d6b878; }
+.st-layout-btn > span:last-child { font-size: 18px; }
+.st-layout-btn:active { transform: scale(.98); }
+.st-data-card { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 11px; padding: 11px 12px; border-radius: 14px; border: 1px solid rgba(255,90,70,.4); background: linear-gradient(160deg, rgba(255,90,70,.14), rgba(255,255,255,.02)); }
+.st-data-card b { display: block; font: 800 12px var(--font-ui); letter-spacing: .06em; color: #fff; }
+.st-data-card small { display: block; margin-top: 2px; max-width: 300px; font: 600 8.5px/1.45 var(--font-ui); color: #b9a29d; }
+.st-warn { background: rgba(255,90,70,.18); border-color: rgba(255,90,70,.5); color: #ff8a78; }
+.st-danger { height: 34px; padding: 0 16px; border-radius: 10px; border: 1px solid rgba(255,90,70,.7); background: rgba(255,90,70,.16); color: #ff8a78; font: 900 10px var(--font-ui); letter-spacing: .14em; cursor: pointer; }
+.st-screen .reset-confirm { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(255,90,70,.6); background: rgba(60,12,10,.7); }
+.st-screen .reset-confirm[hidden] { display: none; }
+.st-screen .reset-confirm p { margin: 0; font: 700 10px var(--font-ui); letter-spacing: .05em; color: #ffd0c8; }
+.st-screen .reset-confirm button { height: 32px; padding: 0 12px; border-radius: 9px; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.08); color: #fff; font: 800 9px var(--font-ui); letter-spacing: .1em; cursor: pointer; }
+.st-screen .reset-confirm .confirm-reset { background: #d63a2a; border-color: #ff7a6a; }
+
+/* ---------- pause ---------- */
+.ps-screen { display: grid; place-items: center; padding: 14px; background: rgba(5,9,7,.5); backdrop-filter: blur(8px) saturate(.75); -webkit-backdrop-filter: blur(8px) saturate(.75); }
+.ps-bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.ps-scan { position: absolute; left: 0; right: 0; height: 90px; background: linear-gradient(180deg, transparent, rgba(var(--lb-rgb), .1), transparent); animation: ps-scan 4.5s linear infinite; }
+@keyframes ps-scan { from { top: -100px; } to { top: 100%; } }
+.ps-panel { position: relative; z-index: 1; width: min(660px, 96%); display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; align-items: center; padding: 20px 22px; border-radius: 20px; border: 1px solid rgba(255,255,255,.2); background: linear-gradient(150deg, rgba(26,36,30,.92), rgba(11,17,14,.92)); box-shadow: 0 24px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(var(--lb-rgb), .12); animation: ps-in .4s cubic-bezier(.2,.9,.25,1.1) both; }
+@keyframes ps-in { from { opacity: 0; transform: scale(.9) translateY(14px); } to { opacity: 1; transform: none; } }
+.ps-panel::before { content: ""; position: absolute; left: 22px; right: 22px; top: -1px; height: 2px; background: linear-gradient(90deg, transparent, rgb(var(--lb-rgb)), transparent); }
+.ps-panel::after { content: ""; position: absolute; left: 50%; top: 18px; bottom: 18px; width: 1px; background: linear-gradient(180deg, transparent, rgba(255,255,255,.18), transparent); }
+.ps-left { display: grid; gap: 9px; min-width: 0; }
+.ps-badge { display: inline-flex; align-items: center; gap: 8px; justify-self: start; padding: 4px 11px 4px 9px; border-radius: 99px; border: 1px solid rgba(255,106,74,.55); background: rgba(255,106,74,.1); font: 800 8px var(--font-ui); letter-spacing: .2em; color: #ff9a82; }
+.ps-badge i { width: 7px; height: 7px; border-radius: 50%; background: #ff6a4a; box-shadow: 0 0 10px #ff6a4a; animation: lb-bump 1s ease-in-out infinite; }
+.ps-screen h2 { margin: 0; font: 900 clamp(34px, 13vh, 54px)/.9 var(--font-ui); letter-spacing: -.02em; color: #f1f5ec; text-shadow: 0 4px 22px rgba(0,0,0,.5); }
+.ps-sub { margin: 0; font: 600 10px/1.5 var(--font-ui); letter-spacing: .05em; color: #9db09a; max-width: 240px; }
+.ps-resume-wrap { margin-top: 4px; animation: lb-glow 2.2s ease-in-out infinite; }
+.ps-resume { position: relative; width: 100%; height: 54px; display: flex; align-items: center; gap: 10px; padding: 0 14px 0 14px; border: 0; color: #2b1a05; font-family: inherit; text-align: left; cursor: pointer; overflow: hidden; background: linear-gradient(180deg, #ffe88a, #f2a73a); clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%); transition: transform .12s; }
+.ps-resume::after { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 38%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.65), transparent); transform: skewX(-20deg); animation: lb-shine 3.2s ease-in-out infinite; }
+.ps-resume:active { transform: scale(.96); }
+.ps-play { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px; background: rgba(60,30,0,.2); }
+.ps-play svg { width: 18px; height: 18px; }
+.ps-resume-text { display: grid; gap: 2px; }
+.ps-resume-text strong { font: 900 16px var(--font-ui); letter-spacing: .16em; }
+.ps-resume-text small { font: 700 7px var(--font-data); letter-spacing: .14em; opacity: .75; }
+.ps-arrow { margin-left: auto; font: 900 20px var(--font-ui); animation: lb-nudge 1s ease-in-out infinite; }
+.ps-right { display: grid; gap: 9px; min-width: 0; }
+.ps-info { display: flex; justify-content: space-between; gap: 8px; font: 800 8px var(--font-ui); letter-spacing: .16em; color: #9db09a; }
+.ps-info span:last-child { color: #ffd166; }
+.ps-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.ps-stats div { display: grid; gap: 2px; padding: 7px 10px; border-radius: 11px; border: 1px solid rgba(255,255,255,.14); background: rgba(0,0,0,.28); }
+.ps-stats span { font: 700 7px var(--font-ui); letter-spacing: .16em; color: #8fa18f; }
+.ps-stats b { font: 900 19px var(--font-ui); letter-spacing: .03em; color: #fff; }
+.ps-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.ps-tile { display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 10px 0 12px; border: 0; color: #e8efe2; font-family: inherit; text-align: left; cursor: pointer; background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.04)); box-shadow: inset 0 0 0 1.4px rgba(255,255,255,.26); clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); transition: transform .12s; }
+.ps-tile svg { width: 19px; height: 19px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.ps-tile b { display: block; font: 900 10.5px var(--font-ui); letter-spacing: .13em; }
+.ps-tile small { display: block; font: 700 6px var(--font-data); letter-spacing: .1em; opacity: .7; margin-top: 1px; }
+.ps-tile:active { transform: scale(.94); }
+.ps-exit { color: #ff8a78; box-shadow: inset 0 0 0 1.4px rgba(255,90,70,.6); background: linear-gradient(180deg, rgba(255,90,70,.18), rgba(255,90,70,.05)); }
+.ps-screen .pause-code { text-align: center; font: 700 7px var(--font-data); letter-spacing: .16em; color: #66776a; }
+.ps-screen .pause-map-button { position: absolute; z-index: 2; top: max(10px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); height: 34px; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); background: rgba(8,12,10,.7); color: #e8efe2; font: 800 10px var(--font-ui); letter-spacing: .12em; cursor: pointer; }
+@media (max-height: 330px) { .ps-sub { display: none; } .ps-panel { padding: 14px 18px; } }
+@media (max-aspect-ratio: 1/1) { .ps-panel { grid-template-columns: 1fr; } .ps-panel::after { display: none; } .st-body { grid-template-columns: 1fr; grid-template-rows: auto 1fr; } .st-tabs { grid-auto-flow: column; } .st-tab span { display: none; } }
+@media (prefers-reduced-motion: reduce) { .ps-screen *, .st-screen * { animation: none !important; } }
+
+.st-screen .setting-row { padding: 7px 12px; }
+.st-pane > legend { padding-bottom: 3px; }
+.st-layout-btn { min-height: 44px; }
+@media (max-width: 600px) { .st-screen .range-row { grid-template-columns: auto 1fr auto; grid-template-areas: "ico txt out" "rng rng rng"; } }
+.st-screen .setting-row::after, .st-screen .setting-row::before { content: none !important; }
+.st-screen .reset-confirm { position: static !important; inset: auto !important; transform: none !important; width: auto !important; box-shadow: none !important; margin-top: 8px; }
+.st-danger { text-decoration: none !important; }
+.ps-screen { background: rgba(5,9,7,.28) !important; backdrop-filter: blur(5px) saturate(.8); -webkit-backdrop-filter: blur(5px) saturate(.8); }
+.ps-screen .fx-vignette { background: radial-gradient(ellipse at 50% 50%, transparent 45%, rgba(2,5,3,.5) 100%); }
+.ps-screen .pause-map-button { display: inline-flex !important; flex-direction: row !important; align-items: center; gap: 6px; width: auto !important; }
+
+.ps-snap { position: absolute; inset: -4%; background-size: cover; background-position: center; filter: blur(7px) brightness(.5) saturate(.85); }
+
 </style>
   
 </head>
@@ -850,27 +985,42 @@ body.mobile-game .game-screen .reload-action { display: none; }
       <div id="locker-toast" class="locker-toast" role="status"></div>
     </section>
 
-    <section id="screen-settings" class="screen overlay-screen" aria-labelledby="settings-title" hidden>
-      <div class="dialog-panel settings-panel">
-        <header class="dialog-header"><div><span class="eyebrow">SYSTEM CONFIGURATION / 02</span><h2 id="settings-title">FIELD SETTINGS</h2></div><span class="dialog-mark" aria-hidden="true">⌘</span></header>
-        <p class="dialog-intro">Tune your kit for the conditions. Changes are stored on this device.</p>
-        <form class="settings-form">
-          <fieldset class="settings-group"><legend>FIELD AUDIO</legend>
-            <label class="setting-row" for="setting-sound"><span><b>Sound effects</b><small>Weapon, movement and field cues</small></span><input id="setting-sound" type="checkbox" checked><span class="toggle-ui" aria-hidden="true"></span></label>
-            <label class="setting-row" for="setting-music"><span><b>Music</b><small>Ambient score during deployment</small></span><input id="setting-music" type="checkbox" checked><span class="toggle-ui" aria-hidden="true"></span></label>
-            <label class="setting-row" for="setting-vibration"><span><b>Haptic response</b><small>Vibration feedback on supported devices</small></span><input id="setting-vibration" type="checkbox" checked><span class="toggle-ui" aria-hidden="true"></span></label>
+    <section id="screen-settings" class="screen overlay-screen st-screen" aria-labelledby="settings-title" hidden>
+      <div class="st-bg" aria-hidden="true"><div class="fx-gradient"></div><div class="fx-floor"></div><div class="fx-vignette"></div></div>
+      <header class="st-top">
+        <button id="btn-back" type="button" class="st-back"><span aria-hidden="true">‹</span> APPLY &amp; BACK</button>
+        <div class="st-title"><b id="settings-title">SETTINGS</b><small>TUNE YOUR KIT · SAVED ON THIS DEVICE</small></div>
+        <span class="st-version" aria-hidden="true">v0.9.4</span>
+      </header>
+      <form class="settings-form st-body" onsubmit="return false">
+        <nav class="st-tabs" aria-label="Settings sections">
+          <button type="button" class="st-tab is-active" data-pane="audio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg><span>AUDIO</span></button>
+          <button type="button" class="st-tab" data-pane="display"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M8 20h8M12 16.5V20"/></svg><span>DISPLAY</span></button>
+          <button type="button" class="st-tab" data-pane="controls"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="7" width="19" height="10" rx="5"/><path d="M8 10v4M6 12h4"/><circle cx="16" cy="11" r=".8"/><circle cx="18" cy="13" r=".8"/></svg><span>CONTROLS</span></button>
+          <button type="button" class="st-tab" data-pane="data"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span>DATA</span></button>
+        </nav>
+        <div class="st-panes">
+          <fieldset class="settings-group st-pane is-active" data-pane="audio"><legend>FIELD AUDIO</legend>
+            <label class="setting-row" for="setting-sound"><i class="st-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg></i><span><b>Sound effects</b><small>Weapon, movement and field cues</small></span><input id="setting-sound" type="checkbox" checked><span class="toggle-ui" aria-hidden="true"></span></label>
+            <label class="setting-row" for="setting-music"><i class="st-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></i><span><b>Music</b><small>Ambient score during deployment</small></span><input id="setting-music" type="checkbox" checked><span class="toggle-ui" aria-hidden="true"></span></label>
+            <label class="setting-row" for="setting-vibration"><i class="st-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="8" y="4" width="8" height="16" rx="2"/><path d="M4 9v6M20 9v6"/></svg></i><span><b>Haptic response</b><small>Vibration feedback on supported devices</small></span><input id="setting-vibration" type="checkbox" checked><span class="toggle-ui" aria-hidden="true"></span></label>
           </fieldset>
-          <fieldset class="settings-group settings-options"><legend>CONTROLS & DISPLAY</legend>
-            <label class="setting-row" for="setting-quality"><span><b>Render quality</b><small>Visual detail and performance</small></span><select id="setting-quality"><option value="high">HIGH</option><option value="balanced" selected>BALANCED</option><option value="low">PERFORMANCE</option></select></label>
-            <label class="setting-row range-row" for="setting-stick-size"><span><b>Movement stick</b><small>Touch control size</small></span><input id="setting-stick-size" type="range" min="70" max="130" value="100"><output>100%</output></label>
-            <label class="setting-row range-row" for="setting-sensitivity"><span><b>Look sensitivity</b><small>Camera movement speed</small></span><input id="setting-sensitivity" type="range" min="1" max="10" value="5"><output>5</output></label>
-            <label class="setting-row range-row" for="setting-aim-sensitivity"><span><b>Aim sensitivity</b><small>Precision while aiming</small></span><input id="setting-aim-sensitivity" type="range" min="1" max="10" value="4"><output>4</output></label>
+          <fieldset class="settings-group settings-options st-pane" data-pane="display"><legend>RENDER</legend>
+            <label class="setting-row st-quality" for="setting-quality"><i class="st-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></i><span><b>Render quality</b><small>Visual detail and performance</small></span><select id="setting-quality"><option value="high">HIGH</option><option value="balanced" selected>BALANCED</option><option value="low">PERFORMANCE</option></select></label>
+            <p class="st-note">PERFORMANCE mode turns off glow, auras and extra particles for smoother play on older phones.</p>
           </fieldset>
-          <button id="btn-edit-layout" class="control-layout-launch" type="button"><span><b>EDIT TOUCH LAYOUT</b><small>MOVE, RESIZE OR FADE BUTTONS AND MAP</small></span><span aria-hidden="true">↗</span></button>
-          <div class="settings-footer"><button id="setting-reset" type="button" class="button-reset">RESET PROGRESS</button><button id="btn-back" type="button" class="button button-primary compact-button"><span><strong>APPLY & RETURN</strong></span><span class="button-arrow">→</span></button></div>
-          <div class="reset-confirm" role="group" aria-label="Confirm reset" hidden><p>Erase all operator progress on this device?</p><button type="button" class="confirm-reset">CONFIRM ERASE</button><button type="button" class="cancel-reset">CANCEL</button></div>
-        </form>
-      </div>
+          <fieldset class="settings-group settings-options st-pane" data-pane="controls"><legend>CONTROLS</legend>
+            <label class="setting-row range-row" for="setting-stick-size"><i class="st-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg></i><span><b>Movement stick</b><small>Touch control size</small></span><input id="setting-stick-size" type="range" min="70" max="130" value="100"><output>100%</output></label>
+            <label class="setting-row range-row" for="setting-sensitivity"><i class="st-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></i><span><b>Look sensitivity</b><small>Camera movement speed</small></span><input id="setting-sensitivity" type="range" min="1" max="10" value="5"><output>5</output></label>
+            <label class="setting-row range-row" for="setting-aim-sensitivity"><i class="st-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.5"/><circle cx="12" cy="12" r="1.4"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4"/></svg></i><span><b>Aim sensitivity</b><small>Precision while aiming</small></span><input id="setting-aim-sensitivity" type="range" min="1" max="10" value="4"><output>4</output></label>
+            <button id="btn-edit-layout" class="control-layout-launch st-layout-btn" type="button"><span><b>EDIT TOUCH LAYOUT</b><small>MOVE, RESIZE OR FADE BUTTONS AND MAP</small></span><span aria-hidden="true">↗</span></button>
+          </fieldset>
+          <fieldset class="settings-group st-pane" data-pane="data"><legend>LOCAL DATA</legend>
+            <div class="st-data-card"><i class="st-ico st-warn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.5h.01"/></svg></i><span><b>Reset progress</b><small>Erases level, coins, skins, maps and stats stored on this device. This cannot be undone.</small></span><button id="setting-reset" type="button" class="button-reset st-danger">RESET</button></div>
+            <div class="reset-confirm" role="group" aria-label="Confirm reset" hidden><p>Erase all operator progress on this device?</p><button type="button" class="confirm-reset">CONFIRM ERASE</button><button type="button" class="cancel-reset">CANCEL</button></div>
+          </fieldset>
+        </div>
+      </form>
     </section>
 
     <section id="screen-layout" class="screen layout-editor-screen" aria-labelledby="layout-title" hidden>
@@ -914,8 +1064,32 @@ body.mobile-game .game-screen .reload-action { display: none; }
       </div>
     </section>
 
-    <section id="screen-pause" class="screen overlay-screen pause-screen" aria-labelledby="pause-title" hidden>
-      <div class="pause-panel"><span class="eyebrow">DEPLOYMENT SUSPENDED</span><h2 id="pause-title">HOLD POSITION.</h2><p>Your field operation is paused.</p><button id="btn-resume" class="button button-primary" type="button"><span><strong>RESUME OPERATION</strong><small>RETURN TO THE FIELD</small></span><span class="button-arrow">→</span></button><button id="btn-pause-settings" class="pause-text-button" type="button">FIELD SETTINGS <span>↗</span></button><button id="btn-pause-menu" class="pause-text-button" type="button">RETURN TO BASE <span>↗</span></button><div class="pause-code">LOCAL SESSION / PROGRESS SAVED</div></div>
+    <section id="screen-pause" class="screen overlay-screen pause-screen ps-screen" aria-labelledby="pause-title" hidden>
+      <div class="ps-bg" aria-hidden="true"><div id="ps-snap" class="ps-snap"></div><div class="ps-scan"></div><div class="fx-vignette"></div></div>
+      <div class="ps-panel">
+        <div class="ps-left">
+          <span class="ps-badge"><i></i>DEPLOYMENT SUSPENDED</span>
+          <h2 id="pause-title">PAUSED</h2>
+          <p class="ps-sub">Hold position, operator. The field waits for you.</p>
+          <div class="ps-resume-wrap">
+            <button id="btn-resume" class="ps-resume" type="button"><span class="ps-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span><span class="ps-resume-text"><strong>RESUME</strong><small>RETURN TO THE FIELD</small></span><span class="ps-arrow" aria-hidden="true">»</span></button>
+          </div>
+        </div>
+        <div class="ps-right">
+          <div class="ps-info"><span id="ps-map">LAST LIGHT</span><span id="ps-weapon">M4A1</span></div>
+          <div class="ps-stats">
+            <div><span>SURVIVORS</span><b id="ps-alive">48</b></div>
+            <div><span>ELIMS</span><b id="ps-kills">0</b></div>
+            <div><span>HEALTH</span><b id="ps-hp">100</b></div>
+            <div><span>TIME</span><b id="ps-time">00:00</b></div>
+          </div>
+          <div class="ps-actions">
+            <button id="btn-pause-settings" class="ps-tile" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v3M12 18.2v3M2.8 12h3M18.2 12h3M5.5 5.5l2.1 2.1M16.4 16.4l2.1 2.1M18.5 5.5l-2.1 2.1M7.6 16.4l-2.1 2.1"/></svg><span><b>SETTINGS</b><small>AUDIO · CONTROLS</small></span></button>
+            <button id="btn-pause-menu" class="ps-tile ps-exit" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4.5H5.5v15H10M14.5 8l4 4-4 4M18.5 12h-9"/></svg><span><b>QUIT</b><small>RETURN TO BASE</small></span></button>
+          </div>
+          <div class="pause-code">LOCAL SESSION / PROGRESS SAVED</div>
+        </div>
+      </div>
       <button class="pause-map-button" type="button" data-action="map" aria-label="Tactical map">⌖ <span>MAP</span></button>
     </section>
 
@@ -2585,6 +2759,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       const skin = Cosmetics.equipped("skin");
       this.rgb = hexRgb(skin.ring);
       root.style.setProperty("--lb-rgb", this.rgb);
+      document.documentElement.style.setProperty("--lb-rgb", this.rgb);
       const name = $("#lobby-skin-name");
       if (name) name.textContent = skin.name.toUpperCase();
       const rarity = $("#lobby-skin-rarity");
@@ -2892,6 +3067,77 @@ body.mobile-game .game-screen .reload-action { display: none; }
         ctx.fillStyle = "#ffd166";
         ctx.fillText("+12 CR", f.x, f.y - f.t * 36);
         ctx.globalAlpha = 1;
+      }
+    }
+  }
+
+  /* ---------------- SETTINGS + PAUSE UI helpers ---------------- */
+  class SettingsUI {
+    static init() {
+      this.tabs = $$(".st-tab");
+      this.panes = $$(".st-pane");
+      this.tabs.forEach((tab) => tab.addEventListener("click", () => {
+        audioSystem?.play("button");
+        this.show(tab.dataset.pane);
+      }));
+      const select = $("#setting-quality");
+      if (select && !$(".st-seg")) {
+        const seg = document.createElement("div");
+        seg.className = "st-seg";
+        seg.setAttribute("role", "radiogroup");
+        for (const [value, label] of [["high", "HIGH"], ["balanced", "BALANCED"], ["low", "PERFORMANCE"]]) {
+          const chip = document.createElement("button");
+          chip.type = "button";
+          chip.dataset.value = value;
+          chip.textContent = label;
+          chip.addEventListener("click", (event) => {
+            event.preventDefault();
+            select.value = value;
+            select.dispatchEvent(new Event("change", { bubbles: true }));
+            audioSystem?.play("button");
+            this.sync();
+          });
+          seg.appendChild(chip);
+        }
+        select.parentElement.appendChild(seg);
+      }
+      $$('#screen-settings input[type="range"]').forEach((input) => input.addEventListener("input", () => this.fill(input)));
+      $$('#screen-settings input[type="checkbox"]').forEach((input) => input.addEventListener("change", () => audioSystem?.play("button")));
+      this.sync();
+    }
+
+    static show(name) {
+      this.tabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.pane === name));
+      this.panes.forEach((pane) => pane.classList.toggle("is-active", pane.dataset.pane === name));
+    }
+
+    static fill(input) {
+      const min = Number(input.min || 0);
+      const max = Number(input.max || 100);
+      input.style.setProperty("--pct", `${((Number(input.value) - min) / (max - min)) * 100}%`);
+    }
+
+    static sync() {
+      $$('#screen-settings input[type="range"]').forEach((input) => this.fill(input));
+      const select = $("#setting-quality");
+      $$(".st-seg button").forEach((chip) => chip.classList.toggle("is-active", select && chip.dataset.value === select.value));
+    }
+  }
+
+  class PauseUI {
+    static refresh() {
+      const text = (id) => ($(id)?.textContent || "").trim();
+      const set = (id, value) => { const node = $(id); if (node) node.textContent = value; };
+      set("#ps-alive", text("#hud-remaining") || "—");
+      set("#ps-kills", text("#hud-kills") || "0");
+      set("#ps-hp", text("#hud-hp-num") || "100");
+      set("#ps-time", text("#hud-timer") || "00:00");
+      set("#ps-weapon", text("#hud-weapon") || "—");
+      set("#ps-map", Maps.current().name.toUpperCase());
+      const snap = $("#ps-snap");
+      const canvas = $("#game-canvas");
+      if (snap && canvas) {
+        try { snap.style.backgroundImage = `url(${canvas.toDataURL("image/jpeg", 0.55)})`; } catch (error) { snap.style.backgroundImage = "none"; }
       }
     }
   }
@@ -4392,6 +4638,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       Locker.init(save);
       MapSelect.init(save);
       Lobby.init(save);
+      SettingsUI.init();
       this.bindMenu();
       this.bindSettings();
       this.bindLayoutEditor();
@@ -4411,6 +4658,8 @@ body.mobile-game .game-screen .reload-action { display: none; }
       }
       document.body.classList.toggle("is-playing", screen === "game" || screen === "pause");
       Lobby.setActive(screen === "menu");
+      if (screen === "settings") SettingsUI.sync();
+      if (screen === "pause") PauseUI.refresh();
     }
 
     static bindMenu() {
@@ -4451,6 +4700,7 @@ body.mobile-game .game-screen .reload-action { display: none; }
       $(".confirm-reset")?.addEventListener("click", () => {
         this.save.reset();
         this.loadSettings();
+        SettingsUI.sync();
         const confirmation = $(".reset-confirm");
         if (confirmation) confirmation.hidden = true;
         this.toast("LOCAL PROGRESS RESET", 2.4, "weapon");
